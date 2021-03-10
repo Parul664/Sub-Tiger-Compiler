@@ -9,11 +9,11 @@ struct
 	datatype tyfields = Params of (id * type_id) list
  	
 	(* The the program in tiger language is either an exp or some declarations*)
- 	datatype ast = exp | decs
+ 	datatype ast = E of exp | D of dec list
 
 
 
-	datatype exp = (*Literals*)
+	and exp = (*Literals*)
 				   NilExpr
 				 | SExpr of string
 				 | IExpr of int
