@@ -18,27 +18,23 @@ struct
 				 | SExpr of string
 				 | IExpr of int
 
-				 (* Array declarations*)
+				 (* Array creation*)
 				 | ArrayExpr of { Type : type_id, Size : exp , Initial :  exp list}
 				 
 				 (*Record Creation*)
 				 | RecordExpr of { Type : type_id, Values : ( id * exp) list }
 
-				 (*Object Creation*)
-				 | ObjectExpr of type_id
-
-				 (* Variable, fields, element is an array*)
+				 (* Variable, records, arrays for instance array[2]*)
 				 | LValueExpr of lvalue
 
 				 (* Function Call*)
 				 | FuncCallExpr of {Id : id, Param : exp list}
 
-				 (*Method Call *)
-				 | MethodCallExpr of {Lvalue : lvalue , Id : id, Param : exp list}
-
 				 (*Operations*)
 				 | NegationExpr of exp
 				 | BinOpExpr of exp * BinOp * exp
+
+				 (*A sequence of expressions*)
 				 | SeqExpr of exp list
 
 				 | AssignExpr of lvalue * exp
@@ -50,65 +46,55 @@ struct
 				 | BreakExpr 
 				 | LetExpr of (dec list) * (exp list)
 
-	(* Name of variables, elements, arrays, function, methods etc *)
-    and lvalue   = id
-    			 (*Getting method or variable of an object of a class*)
-    	 		 | ObjEl of lvalue * id
+	(* Name of variables, array elements and record fields etc *)
+    and lvalue   = SimpleVar of id
+  					
+  		         (* Variables relating to records *)
+  				 | FeildVar of lvalue * id
 
-    	 		 (*Getting element of an array*)
+    	 		 (*Life if array is a, then a[2]*)
     	 		 | ArrEl of lvalue * exp
 
    	(* This is the type of declarations that we can have in this language*)
     and dec      = 
-    			 (* Type Declarations *)
+    			 (* Type Declarations like type a = int*)
     			   TypeDec of id * ty
 
- 				 (* Class Definition *)
- 				 | ClassDec of {Id : id , Extends : type_id option , Classfields : classfield list}
-
- 				 (* Variable Declaration *)
- 				 (*| VarDec of id * type_id option * exp*)
+				 (* Variable Declaration *)
+ 				 (* like var a : int = 5*)
  				 | VarDec of id * type_id option * exp
 
- 				 (* Function Declaration *)
+ 				 (* Function Declaration = Includes recursive functions
+					function f() : int = g(a)
+					function g(i: int) = f()
+ 				 *)
  				 | FuncDecs of FuncDec list
-
- 	(* 
- 	Classes are made following the EPITA reference manual
- 	The things inside the class
-		1. Methods
-		2. Type definitions
- 	*)
- 	and classfield = (*There are either Variable Declarations in the Class*)
- 					 ClassVarDec of id * type_id option * exp
-
- 					 (*Or method declarations*)
- 				     | MethodDef of {Id : id , Param : tyfields, Return : type_id option, Body: exp}
 
 
  	(*The Possible types while assigning a type to a variable - which values can possibly assigned to type variables*)
- 	and ty  = AlreadyDef of type_id
- 			(*An array of assignments*)
-			| SeqDef of tyfields
-			| ArrayDef of type_id
-			| ClassDef of {Id : id , Extends : type_id option , Classfields : classfield list}
+ 	and ty = (*Already defined variabes, like using 'a' which is defined earlier*)
+ 			  AlreadyTy of type_id
+ 			(* An array of assignments corresponding to that of record *)
+			| SeqTy of tyfields
+			(* 'array of' some type*)
+			| ArrayTy of type_id
 
 	(* The AST is made under the assumption that the compiler at the end, will suppor mutual recursion of functions*)
 	and FuncDec = fundec of {Id : id, Param : tyfields, RetType : type_id option, Body : exp }
 
 	(* The Binary Operations *)
-	and BinOp    = Plus 		  (*+*)
-		  		 | Minus		  (*-*)
- 		  		 | Mul			  (***)
- 		  		 | Div			  (*/*)
- 		  		 | Equals		  (*=*)
- 		  		 | AngBrac		  (*<>*)
- 		  		 | GreatThan 	  (*>*)
- 		  		 | LessThan       (*<*)
- 		  		 | GreatEqualThan (*>=*)
- 		  		 | LessEqualThan  (*<=*)
- 		  		 | And	    	  (*&*)
- 		  		 | Or  			  (*|*)
+	and BinOp    = Plus 		  	(*+*)
+		  		 | Minus		  	(*-*)
+ 		  		 | Mul		  	    (***)
+ 		  		 | Div		  	    (*/*)
+ 		  		 | Equals		  	(*=*)
+ 		  		 | AngBrac	  	    (*<>*)
+ 		  		 | GreatThan 	  	(*>*)
+ 		  		 | LessThan       	(*<*)
+ 		  		 | GreatEqualThan   (*>=*)
+ 		  		 | LessEqualThan    (*<=*)
+ 		  		 | And	    	    (*&*)
+ 		  		 | Or  			    (*|*)
 
 
 
