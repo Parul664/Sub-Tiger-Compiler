@@ -4,5 +4,8 @@
 2021-02-24
 - Added support for () and / for Reverse Polish Compiler
 
-2021-02-03
+2021-03-03
 - Made AST for MIPS and Tiger Language
+
+2021-03-10
+- Made tiger.grm and tiger.lex files for Tiger Language

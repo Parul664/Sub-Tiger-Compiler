@@ -1,0 +1,230 @@
+(*-------------- SECTION 1 - Right now its empty-----------------*)
+
+%%
+(* --------------------------SECTION 2---------------------------*)
+
+%eop EOF (* What token to use as end of parsing token              *)
+%verbose (* Generates a printed form of the table in expr.grm.desc - helpful for debugging *)
+%pure
+
+(* The terms in the Tiger Language *)
+%term CONST_INT of int
+    | CONST_STR of string
+    | NIL
+    | PLUS
+    | MINUS 
+    | MUL
+    | DIVIDE 
+    | EOF
+    | NEWLINE
+    | LBRAC_C   (* C = Curly *)
+    | RBRAC_C      
+    | LBRAC_SQ  (* SQ = Square *)
+    | RBRAC_SQ
+    | LBRAC_R   (* R = Round *)
+    | RBRAC_R
+    | SEMICOLON
+    | WHILE
+    | IF 
+    | FOR
+    | LET
+    | ARRAY 
+    | THEN 
+    | ELSE
+    | END  
+    | FUNCTION  
+    | COLON
+    | COMMA
+    | DOT 
+    | EQ 
+    | NEQ       (*Not Equal    <> *)
+    | LT        (*Less Than    < *)
+    | GT        (*Greater Than >  *)
+    | GTE       (*Greater Than Equal to >= *)
+    | LTE       (*Less Than Equal to    <= *)
+    | ASSIGN    (*Assign                := *)
+    | OR        (*Logical OR operator   |  *)
+    | AND       (*Logical AND operator  &  *)
+    | VAR 
+    | TYPE 
+    | DUB_Q     (*Though not coming in use, added it for the sake of completion of the Grammer*)
+    | SIN_Q     (*Same as double qoutes*)
+    | IN
+    | OF
+    | BREAK
+    | TO
+    | DO
+    | ID of Tiger.id    (*Tiger.id is defined in Tiger structure*)
+(* The datatype for the Type-Id is defined in terms of ID in Tiger's AST, though in the AST Type-Td is defined different from ID *)
+(* The is done for the ease of parsing, so that every thing first is parsed as ID and then later the semantics related to that can be decided *)
+
+(* The non terminals of the language *)
+%nonterm  PROGRAM   of Tiger.exp list           (*The main program, here it is a list of expressions*)
+        | DEC       of Tiger.dec                (*The list of declarations*)
+        | EXP       of Tiger.exp                (*The PROGRAM is a list of EXP; EXP is the main AST of the Tiger Language*)
+        | FIELD     of (Tiger.id * Tiger.exp) list  (*The pairs inside the record*)
+        | PARAM     of Tiger.exp list           (*List of parameters passed to a function while calling it*)
+        | PARAM2    of Tiger.exp list           (*This function is also a list of parameters; *)
+                                                (*since we don't want the last param to end with a comma, we use PARAM2 with PARAM to avoid that*)    
+        | DECS      of Tiger.dec list
+        | EXPS      of Tiger.exp list           (*List of expressions, separated by semicolon*)
+        | EXPS2     of Tiger.exp list           (*Serves the same purpose as PARAM2, (*Since, we don't want that last EXP to necessarily have a ;*)*)
+        | TYFIELDS  of Tiger.tyfields           (*Used inside function definition to denote which paramters it will take*) 
+        | TYFIELDS2 of (Tiger.id * Tiger.type_id ) list         (*Same purpose as PARAM and TYFIELDS*)
+        | TY        of Tiger.ty                 (*TY is the set of all types, like a simple type variable or inside a record*)
+        | FUNCDEF   of Tiger.FuncDec list       (*It is a list of function definition of function*)
+        | LVALUE    of Tiger.lvalue             (*lvalue is the set of possible things that can be assigned some value*)
+        | ARITH     of Tiger.exp                (*The set of possible Arithmatic operations*)
+        | FIELD2    of (Tiger.id * Tiger.exp) list
+
+(* Associativity of keywords and Operators *)
+%nonassoc NEWLINE
+%nonassoc ASSIGN DO
+%nonassoc  LBRAC_SQ RBRAC_SQ LBRAC_R RBRAC_R OF FUNCTION
+%nonassoc ID
+%right IF
+%right THEN 
+%right ELSE
+%left DOT
+%left OR
+%left AND
+%nonassoc EQ NEQ LT LTE GT GTE
+%left PLUS MINUS
+%left MUL DIVIDE
+
+(* Start variable for the Grammer *)
+%start PROGRAM
+
+(* Used while connecting the lexer with the parsor *)
+%name Expr
+%pos int
+(* This is non-shiftable symbol, meaning that this symbol cannot be found on the right side of any rule*)
+%noshift EOF
+
+%%
+
+(* --------------------------SECTION 3------------------------------------- *)
+
+(* This a list of expressions - The whole program is modelled as a list of Expression*)
+PROGRAM : EXPS                   (EXPS)
+
+(* 
+Exps is either empty or a ; followed by EXPS2. The first EXP will be from  EXPS and then after that
+if any EXP wants to be part, then it is preceded by a semicolon. 
+Hence exps become of the form E1;E2;E3  
+*)
+EXPS   :  (*EMPTY*)               ( []           )
+        | EXP EXPS2               ( EXP :: EXPS2 )
+EXPS2  :  (*EMPTY*)               ( []           )
+        | SEMICOLON EXP EXPS2     ( EXP :: EXPS2 )
+
+(*
+This is the list of expressions.
+*)
+EXP     : CONST_INT                         ( Tiger.IExpr CONST_INT                    )
+        | CONST_STR                         ( Tiger.SExpr CONST_STR                    )
+        | NIL                               ( Tiger.NilExpr                            )
+        | ID LBRAC_SQ EXP RBRAC_SQ OF EXP   ( Tiger.ConvArrAST (Tiger.TC ID) EXP1 EXP2 )
+        | ID LBRAC_C FIELD RBRAC_C          ( Tiger.ConvRecAST (Tiger.TC ID) FIELD     )
+        | LVALUE                            ( Tiger.LValueExpr LVALUE                  )
+        | ID LBRAC_R PARAM RBRAC_R          ( Tiger.ConvFunCallAST ID PARAM            )
+        (* Operations *)
+        | MINUS EXP                         ( Tiger.NegationExpr EXP                   )
+        | ARITH                             ( ARITH                                    )                                      
+        | LBRAC_R EXPS RBRAC_R              ( Tiger.SeqExpr EXPS                       )
+        | LVALUE ASSIGN EXP                 ( Tiger.AssignExpr (LVALUE,EXP)            )
+        | IF EXP THEN EXP ELSE EXP          ( Tiger.ConvIfElseAST EXP1 EXP2 EXP3       )
+        | IF EXP THEN EXP                   ( Tiger.ConvIfAST EXP1 EXP2                )
+        | WHILE EXP DO EXP                  ( Tiger.ConvWhileAST EXP1 EXP2             )
+        | FOR ID ASSIGN EXP TO EXP DO EXP   ( Tiger.ConvForAST ID EXP1 EXP2 EXP3       )
+        | BREAK                             ( Tiger.BreakExpr                          )
+        | LET DECS IN EXPS END              ( Tiger.ConvLetAST DECS EXPS               )
+
+(*
+The set of declarations 
+These are inside the let statement, and so does not collide with the discription of the EXP
+DECS - List of Declarations (DEC)
+*)
+
+DECS    : (*EMPTY*)                      ( []           )
+        | DEC DECS                       ( DEC :: DECS  )
+
+DEC     : TYPE ID EQ TY                  ( Tiger.TypeDec (ID,TY)                    )
+        | VAR ID ASSIGN EXP              ( Tiger.ConvVarDec ID EXP                  )
+        | VAR ID COLON ID ASSIGN EXP     ( Tiger.ConvVarDecTy ID1 (Tiger.TC ID2) EXP)
+        | FUNCDEF                        ( Tiger.FuncDecs FUNCDEF                   )
+ 
+
+FUNCDEF : FUNCTION ID LBRAC_R TYFIELDS RBRAC_R EQ EXP                  ( [Tiger.ConvFunDecAST ID TYFIELDS EXP]                              )
+        | FUNCTION ID LBRAC_R TYFIELDS RBRAC_R COLON ID EQ EXP         ( [Tiger.ConvFunDecRetAST ID1 TYFIELDS (Tiger.TC ID2) EXP]           )
+        | FUNCTION ID LBRAC_R TYFIELDS RBRAC_R EQ EXP FUNCDEF          ( (Tiger.ConvFunDecAST ID TYFIELDS EXP) :: FUNCDEF                   )
+        | FUNCTION ID LBRAC_R TYFIELDS RBRAC_R COLON ID EQ EXP FUNCDEF ( (Tiger.ConvFunDecRetAST ID1 TYFIELDS (Tiger.TC ID2) EXP) :: FUNCDEF)
+
+
+(* 
+The parameters in function declaration
+(a : int , b : string )
+TYFIELDS ensure that there are no tyfields of the form (a,b,c,), and ensures that there is an element after COMMA
+TYFIELDS is of the type Tiger.tyfields, defined is Tiger's AST as TF of (id * type_id) list
+Type of TYFIELDS2 is (id * type_id) list
+*)
+TYFIELDS: (* EMPTY *)                       ( Tiger.TF([])                                  )
+        | ID COLON ID TYFIELDS2             ( Tiger.TF((ID1 , (Tiger.TC ID2)) :: TYFIELDS2) )
+TYFIELDS2 : ([])
+          | COMMA ID COLON ID TYFIELDS2     ( (ID1 , (Tiger.TC ID2)) :: TYFIELDS2)
+
+(* TY defines the possible types *)
+TY      : ID                                ( Tiger.AlreadyTy (Tiger.TC ID) )
+        | LBRAC_C TYFIELDS RBRAC_C          ( Tiger.SeqTy TYFIELDS          )
+        | ARRAY OF ID                       ( Tiger.ArrayTy (Tiger.TC ID)   )
+
+
+(* 
+The expressions for Binary Operations
+*)    
+ARITH   : EXP PLUS EXP              ( Tiger.plus EXP1 EXP2           )
+        | EXP MINUS EXP             ( Tiger.minus EXP1 EXP2          )
+        | EXP MUL EXP               ( Tiger.mul EXP1 EXP2            )
+        | EXP DIVIDE EXP            ( Tiger.divv EXP1 EXP2           )
+        | EXP EQ EXP                ( Tiger.equals EXP1 EXP2         )
+        | EXP NEQ EXP               ( Tiger.angbrac EXP1 EXP2        )
+        | EXP GT EXP                ( Tiger.greaterThan EXP1 EXP2    )
+        | EXP LT EXP                ( Tiger.lessThan EXP1 EXP2       )
+        | EXP LTE EXP               ( Tiger.lessEqualThan EXP1 EXP2  )
+        | EXP GTE EXP               ( Tiger.greatEqualThan EXP1 EXP2 )
+        | EXP AND EXP               ( Tiger.andd EXP1 EXP2           )
+        | EXP OR EXP                ( Tiger.orr EXP1 EXP2            )
+(*
+(* 
+The things that are there in the record
+type-id {a = 5, c = 6}
+FIELD is the region a = 5, b = 6
+*)
+*)
+FIELD   : (* EMPTY *)             ( []                   )
+        | ID EQ EXP FIELD2        ( (ID , EXP) :: FIELD2 )
+FIELD2  : (* EMPTY *)             ( []                   )
+        | COMMA ID EQ EXP FIELD2  ( (ID , EXP) :: FIELD2 )
+(*
+(*
+The paramters while calling a function
+id (4,5)
+PARAM is 4,5 here
+PARAM2 is to avoid cases like 4,5,6, . The wrongly written expression will be flushed on checking
+*)
+*)
+PARAM   : (*EMPTY*)                 ( []            )
+        | EXP PARAM2                ( EXP :: PARAM2 )
+PARAM2 :                            ( []            )
+        | COMMA EXP PARAM2          ( EXP :: PARAM2 )
+
+
+(*
+Sequence of Operation (exp1, exp2, exp3)
+*)
+
+
+
+LVALUE  : ID                            ( Tiger.SimpleVar ID           )
+        | LVALUE DOT ID                 ( Tiger.FeildVar (LVALUE , ID) )
+        | LVALUE LBRAC_SQ EXP RBRAC_SQ  ( Tiger.ArrEl (LVALUE, EXP)    )  
