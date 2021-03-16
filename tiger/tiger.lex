@@ -65,21 +65,21 @@ digit = [0-9];
 %%
 
 
-<INITIAL>"/*" => (YYBEGIN COMMENT; nestComment := 1 ;continue());
-<COMMENT>"*/" => (nestComment := !nestComment -1; if (!nestComment =0) then YYBEGIN INITIAL else error("Comments not closed properly",!lineRef,!lineRef);continue());
-<COMMENT>"/*" => (nestComment := !nestComment +1; continue());
-<COMMENT>\n({ws}*\n)*   =>  ( let val old = !lineRef
-                              in UpdateLine (newlineCount yytext); continue()
-                              end
-                              );
-<COMMENT>.  => (continue());
+<INITIAL>"/*"    => (YYBEGIN COMMENT; nestComment := 1 ;continue());
+<COMMENT>"*/"    => (nestComment := !nestComment -1; if (!nestComment =0) then YYBEGIN INITIAL else error("Comments not closed properly",!lineRef,!lineRef);continue());
+<COMMENT>"/*"    => (nestComment := !nestComment +1; continue());
+<COMMENT>\n({ws}*\n)* =>  ( let val old = !lineRef
+                            in UpdateLine (newlineCount yytext); continue()
+                            end
+                          );
+<COMMENT>.             => (continue());
 
-<INITIAL,COMMENT>{ws}+              => (lex());
+<INITIAL,COMMENT>{ws}+ => (lex());
 
 <INITIAL>\n({ws}*\n)*  => ( let val old = !lineRef
-                in UpdateLine (newlineCount yytext); continue()
-                end
-                );
+                            in UpdateLine (newlineCount yytext); continue()
+                            end
+                          );
 
 <INITIAL>{digit}+   => ( Tokens.CONST_INT (toInt yytext, !lineRef, !lineRef) );
 <INITIAL>"+"        => ( Tokens.PLUS  (!lineRef,!lineRef) );
@@ -87,53 +87,53 @@ digit = [0-9];
 <INITIAL>"*"        => ( Tokens.MUL (!lineRef,!lineRef) );
 <INITIAL>"nil"      => ( Tokens.NIL (!lineRef,!lineRef));
 <INITIAL>"for"      => ( Tokens.FOR (!lineRef,!lineRef));
-<INITIAL>"-"  => (Tokens.MINUS (!lineRef,!lineRef));
-<INITIAL>"*"  => (Tokens.MUL (!lineRef,!lineRef));
-<INITIAL>"/"   => (Tokens.DIVIDE (!lineRef,!lineRef));
-<INITIAL>"("   => (Tokens.LBRAC_R (!lineRef,!lineRef));
-<INITIAL>")"   => (Tokens.RBRAC_R (!lineRef,!lineRef));
-<INITIAL>"["  => (Tokens.LBRAC_SQ (!lineRef,!lineRef));
-<INITIAL>"]"   => (Tokens.RBRAC_SQ (!lineRef,!lineRef));
-<INITIAL>";"     => (Tokens.SEMICOLON (!lineRef,!lineRef));
-<INITIAL>"while" => (Tokens.WHILE (!lineRef,!lineRef));
-<INITIAL>"if"    => (Tokens.IF (!lineRef,!lineRef));
-<INITIAL>"for"   => (Tokens.FOR (!lineRef,!lineRef));
-<INITIAL>"let"   => (Tokens.LET (!lineRef,!lineRef));
-<INITIAL>"array" => (Tokens.ARRAY (!lineRef,!lineRef));
-<INITIAL>"then"  => (Tokens.THEN (!lineRef,!lineRef));
-<INITIAL>"else"  => (Tokens.ELSE (!lineRef,!lineRef));
-<INITIAL>"end"   => (Tokens.END (!lineRef,!lineRef));
-<INITIAL>"function"  => (Tokens.FUNCTION (!lineRef,!lineRef));
-<INITIAL>":"     => (Tokens.COLON (!lineRef,!lineRef));
-<INITIAL>","     => (Tokens.COMMA (!lineRef,!lineRef));
-<INITIAL>"."     => (Tokens.DOT (!lineRef,!lineRef));
-<INITIAL>"="     => (Tokens.EQ (!lineRef,!lineRef));
-<INITIAL>"<"     => (Tokens.LT (!lineRef,!lineRef));
-<INITIAL>">"     => (Tokens.GT (!lineRef,!lineRef));
-<INITIAL>"<="    => (Tokens.LTE (!lineRef,!lineRef));
-<INITIAL>">="    => (Tokens.GTE (!lineRef,!lineRef));
-<INITIAL>"<>"    => (Tokens.NEQ (!lineRef,!lineRef));
-<INITIAL>":="    => (Tokens.ASSIGN (!lineRef,!lineRef));
-<INITIAL>"|"     => (Tokens.OR (!lineRef,!lineRef));
-<INITIAL>"&"     => (Tokens.AND (!lineRef,!lineRef));
-<INITIAL>"var"    => (Tokens.VAR (!lineRef,!lineRef));
-<INITIAL>"type"  => (Tokens.TYPE (!lineRef,!lineRef));
-<INITIAL>"in"    => (Tokens.IN (!lineRef,!lineRef));
-<INITIAL>"of"    => (Tokens.OF (!lineRef,!lineRef));
-<INITIAL>"break" => (Tokens.BREAK (!lineRef,!lineRef));
-<INITIAL>"to"    => (Tokens.TO (!lineRef,!lineRef));   
-<INITIAL>"do"    => (Tokens.DO (!lineRef,!lineRef));
-<INITIAL>"break" => (Tokens.BREAK (!lineRef,!lineRef));
+<INITIAL>"-"        => (Tokens.MINUS (!lineRef,!lineRef));
+<INITIAL>"*"        => (Tokens.MUL (!lineRef,!lineRef));
+<INITIAL>"/"        => (Tokens.DIVIDE (!lineRef,!lineRef));
+<INITIAL>"("        => (Tokens.LBRAC_R (!lineRef,!lineRef));
+<INITIAL>")"        => (Tokens.RBRAC_R (!lineRef,!lineRef));
+<INITIAL>"["        => (Tokens.LBRAC_SQ (!lineRef,!lineRef));
+<INITIAL>"]"        => (Tokens.RBRAC_SQ (!lineRef,!lineRef));
+<INITIAL>";"        => (Tokens.SEMICOLON (!lineRef,!lineRef));
+<INITIAL>"while"    => (Tokens.WHILE (!lineRef,!lineRef));
+<INITIAL>"if"       => (Tokens.IF (!lineRef,!lineRef));
+<INITIAL>"for"      => (Tokens.FOR (!lineRef,!lineRef));
+<INITIAL>"let"      => (Tokens.LET (!lineRef,!lineRef));
+<INITIAL>"array"    => (Tokens.ARRAY (!lineRef,!lineRef));
+<INITIAL>"then"     => (Tokens.THEN (!lineRef,!lineRef));
+<INITIAL>"else"     => (Tokens.ELSE (!lineRef,!lineRef));
+<INITIAL>"end"      => (Tokens.END (!lineRef,!lineRef));
+<INITIAL>"function" => (Tokens.FUNCTION (!lineRef,!lineRef));
+<INITIAL>":"        => (Tokens.COLON (!lineRef,!lineRef));
+<INITIAL>","        => (Tokens.COMMA (!lineRef,!lineRef));
+<INITIAL>"."        => (Tokens.DOT (!lineRef,!lineRef));
+<INITIAL>"="        => (Tokens.EQ (!lineRef,!lineRef));
+<INITIAL>"<"        => (Tokens.LT (!lineRef,!lineRef));
+<INITIAL>">"        => (Tokens.GT (!lineRef,!lineRef));
+<INITIAL>"<="       => (Tokens.LTE (!lineRef,!lineRef));
+<INITIAL>">="       => (Tokens.GTE (!lineRef,!lineRef));
+<INITIAL>"<>"       => (Tokens.NEQ (!lineRef,!lineRef));
+<INITIAL>":="       => (Tokens.ASSIGN (!lineRef,!lineRef));
+<INITIAL>"|"        => (Tokens.OR (!lineRef,!lineRef));
+<INITIAL>"&"        => (Tokens.AND (!lineRef,!lineRef));
+<INITIAL>"var"      => (Tokens.VAR (!lineRef,!lineRef));
+<INITIAL>"type"     => (Tokens.TYPE (!lineRef,!lineRef));
+<INITIAL>"in"       => (Tokens.IN (!lineRef,!lineRef));
+<INITIAL>"of"       => (Tokens.OF (!lineRef,!lineRef));
+<INITIAL>"break"    => (Tokens.BREAK (!lineRef,!lineRef));
+<INITIAL>"to"       => (Tokens.TO (!lineRef,!lineRef));   
+<INITIAL>"do"       => (Tokens.DO (!lineRef,!lineRef));
+<INITIAL>"break"    => (Tokens.BREAK (!lineRef,!lineRef));
 <INITIAL>[a-zA-Z][a-zA-Z0-9_]* => (Tokens.ID(yytext, !lineRef,!lineRef));
-<INITIAL>"\""  => (strIn := "";YYBEGIN STRING; continue());
-<STRING>[a-zA-Z0-9]* => (insertStr yytext strIn ;continue());
-<STRING>\\b => (insertStr "\b" strIn ;continue());
-<STRING>\\n => (insertStr "\n" strIn ;continue());
-<STRING>\\t => (insertStr "\t" strIn ;continue());
-<STRING>\\a => (insertStr "\a" strIn ;continue());
-<STRING>\\f => (insertStr "\f" strIn ;continue());
-<STRING>\\r => (insertStr "\r" strIn ;continue());
-<STRING>\\v => (insertStr "\v" strIn ;continue());
-<STRING>\\\" => (insertStr "\"" strIn;continue());
-<STRING>\\\\ => (insertStr "\\" strIn;continue());
-<STRING>"\""  => (YYBEGIN INITIAL; Tokens.CONST_STR(!strIn,!lineRef,!lineRef));
+<INITIAL>"\""       => (strIn := "";YYBEGIN STRING; continue());
+<STRING>[a-zA-Z0-9]*=> (insertStr yytext strIn ;continue());
+<STRING>\\b         => (insertStr "\b" strIn ;continue());
+<STRING>\\n         => (insertStr "\n" strIn ;continue());
+<STRING>\\t         => (insertStr "\t" strIn ;continue());
+<STRING>\\a         => (insertStr "\a" strIn ;continue());
+<STRING>\\f         => (insertStr "\f" strIn ;continue());
+<STRING>\\r         => (insertStr "\r" strIn ;continue());
+<STRING>\\v         => (insertStr "\v" strIn ;continue());
+<STRING>\\\"        => (insertStr "\"" strIn;continue());
+<STRING>\\\\        => (insertStr "\\" strIn;continue());
+<STRING>"\""        => (YYBEGIN INITIAL; Tokens.CONST_STR(!strIn,!lineRef,!lineRef));
