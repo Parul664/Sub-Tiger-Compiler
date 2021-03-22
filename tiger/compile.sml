@@ -24,4 +24,7 @@ structure TIGER = struct
 
     val (program,_) = ExprParser.parse (0,thisLexer,print_error,()) 
 
+    (* This prints the ast using the structure PrintAbsyn in file printast.sml *)
+    val _ = PrintAbsyn.print(TextIO.stdOut,program)
+
 end

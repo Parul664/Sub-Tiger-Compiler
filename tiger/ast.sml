@@ -19,7 +19,7 @@ struct
 				 | IExpr of int
 
 				 (* Array creation*)
-				 | ArrayExpr of { Type : type_id, Size : exp , Initial :  exp}
+				 | ArrayExpr of { Type : type_id, Sizee : exp , Initial :  exp}
 				 
 				 (*Record Creation*)
 				 | RecordExpr of { Type : type_id, Values : ( id * exp) list }
@@ -104,7 +104,7 @@ struct
 
 	(* Convert Array Declaration to AST *)
 	fun ConvArrAST id sz init = ArrayExpr { Type    = id,
-											Size    = sz,
+											Sizee    = sz,
 											Initial = init
 										  }
 

@@ -11,4 +11,4 @@
 - Made tiger.grm and tiger.lex files for Tiger Language
 
 2021-03-17
-- Tested and made some changes to the Tiger Language .grm and .lex files
+- Tested and made some changes to the tiger.grm and tiger.lex files. Also, added a print function for printing AST.

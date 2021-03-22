@@ -54,6 +54,7 @@
     | BREAK
     | TO
     | DO
+    | EXP_MINUS 
     | ID of string    (*Tiger.id is defined in Tiger structure*)
 (* The datatype for the Type-Id is defined in terms of ID in Tiger's AST, though in the AST Type-Td is defined different from ID *)
 (* The is done for the ease of parsing, so that every thing first is parsed as ID and then later the semantics related to that can be decided *)
@@ -75,9 +76,10 @@
         | LVALUE    of Tiger.lvalue             (*lvalue is the set of possible things that can be assigned some value*)
         | ARITH     of Tiger.exp                (*The set of possible Arithmatic operations*)
         | FIELD2    of (Tiger.id * Tiger.exp) list
+        
 
 (* Associativity of keywords and Operators *)
-%nonassoc ASSIGN
+%nonassoc ASSIGN DO
 %left OR AND
 %nonassoc EQ NEQ LT LTE GT GTE
 %left PLUS MINUS
@@ -89,7 +91,7 @@
 %right IF
 %right THEN 
 %right ELSE
-%right DO 
+%right EXP_MINUS
 %nonassoc OF
 (* %left DOT *)
 %nonassoc FUNCTION
@@ -134,7 +136,7 @@ EXP     : CONST_INT                         ( Tiger.IExpr CONST_INT             
         | ID LBRAC_C FIELD RBRAC_C          ( Tiger.ConvRecAST (Tiger.Sub ID) FIELD    )
         | ID LBRAC_R PARAM RBRAC_R          ( Tiger.ConvFunCallAST ID PARAM            )
         (* Operations *)
-        (* | MINUS EXP                         ( Tiger.NegationExpr EXP                   ) *)
+        | MINUS EXP  %prec EXP_MINUS        ( Tiger.NegationExpr EXP                   )
         | ARITH                             ( ARITH                                    )                                      
         | LBRAC_R EXPS RBRAC_R              ( Tiger.SeqExpr EXPS                       )
         | LVALUE ASSIGN EXP                 ( Tiger.AssignExpr (LVALUE,EXP)            )
@@ -222,7 +224,7 @@ PARAM   : (*EMPTY*)                 ( []            )
 PARAM2 :                            ( []            )
         | COMMA EXP PARAM2          ( EXP :: PARAM2 )
 
-(* LVALUE is something that can be assigned a value/ something that we can assign value from *)
+(* Lvalue is something that can be assigned a value/ something that we can assign value from *)
 LVALUE : ID                             ( Tiger.SimpleVar ID                       )
         | LVALUE DOT ID                 ( Tiger.FeildVar (LVALUE , ID)             )
         | ID LBRAC_SQ EXP RBRAC_SQ      ( Tiger.ArrEl ((Tiger.SimpleVar ID) , EXP) )
