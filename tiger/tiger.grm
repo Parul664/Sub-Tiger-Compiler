@@ -54,43 +54,48 @@
     | BREAK
     | TO
     | DO
-    | ID of Tiger.id    (*Tiger.id is defined in Tiger structure*)
+    | ID of string    (*Tiger.id is defined in Tiger structure*)
 (* The datatype for the Type-Id is defined in terms of ID in Tiger's AST, though in the AST Type-Td is defined different from ID *)
 (* The is done for the ease of parsing, so that every thing first is parsed as ID and then later the semantics related to that can be decided *)
 
 (* The non terminals of the language *)
 %nonterm  PROGRAM   of Tiger.exp list           (*The main program, here it is a list of expressions*)
-        | DEC       of Tiger.dec                (*The list of declarations*)
+        | DEC       of Tiger.dec                (*declarations*)
         | EXP       of Tiger.exp                (*The PROGRAM is a list of EXP; EXP is the main AST of the Tiger Language*)
         | FIELD     of (Tiger.id * Tiger.exp) list  (*The pairs inside the record*)
         | PARAM     of Tiger.exp list           (*List of parameters passed to a function while calling it*)
-        | PARAM2    of Tiger.exp list           (*This function is also a list of parameters; *)
-                                                (*since we don't want the last param to end with a comma, we use PARAM2 with PARAM to avoid that*)    
-        | DECS      of Tiger.dec list
+        | PARAM2    of Tiger.exp list           (*This function is also a list of parameters; *)                                     (*since we don't want the last param to end with a comma, we use PARAM2 with PARAM to avoid that*)    
+        | DECS      of Tiger.dec list           (*List of declarations*)
         | EXPS      of Tiger.exp list           (*List of expressions, separated by semicolon*)
         | EXPS2     of Tiger.exp list           (*Serves the same purpose as PARAM2, (*Since, we don't want that last EXP to necessarily have a ;*)*)
         | TYFIELDS  of Tiger.tyfields           (*Used inside function definition to denote which paramters it will take*) 
         | TYFIELDS2 of (Tiger.id * Tiger.type_id ) list         (*Same purpose as PARAM and TYFIELDS*)
         | TY        of Tiger.ty                 (*TY is the set of all types, like a simple type variable or inside a record*)
-        | FUNCDEF   of Tiger.FuncDec list       (*It is a list of function definition of function*)
+        | FUNCDEF   of Tiger.FuncDec            (*It is a list of function definition of function*)
         | LVALUE    of Tiger.lvalue             (*lvalue is the set of possible things that can be assigned some value*)
         | ARITH     of Tiger.exp                (*The set of possible Arithmatic operations*)
         | FIELD2    of (Tiger.id * Tiger.exp) list
 
 (* Associativity of keywords and Operators *)
-%nonassoc NEWLINE
-%nonassoc ASSIGN DO
-%nonassoc  LBRAC_SQ RBRAC_SQ LBRAC_R RBRAC_R OF FUNCTION
-%nonassoc ID
-%right IF
-%right THEN 
-%right ELSE
-%left DOT
-%left OR
-%left AND
+%nonassoc ASSIGN
+%left OR AND
 %nonassoc EQ NEQ LT LTE GT GTE
 %left PLUS MINUS
 %left MUL DIVIDE
+%left LBRAC_R RBRAC_R
+%nonassoc ID
+(* %nonassoc NEWLINE *)
+%left  LBRAC_SQ RBRAC_SQ LBRAC_C RBRAC_C
+%right IF
+%right THEN 
+%right ELSE
+%right DO 
+%nonassoc OF
+(* %left DOT *)
+%nonassoc FUNCTION
+
+%prefer OF
+
 
 (* Start variable for the Grammer *)
 %start PROGRAM
@@ -124,12 +129,12 @@ This is the list of expressions.
 EXP     : CONST_INT                         ( Tiger.IExpr CONST_INT                    )
         | CONST_STR                         ( Tiger.SExpr CONST_STR                    )
         | NIL                               ( Tiger.NilExpr                            )
-        | ID LBRAC_SQ EXP RBRAC_SQ OF EXP   ( Tiger.ConvArrAST (Tiger.TC ID) EXP1 EXP2 )
-        | ID LBRAC_C FIELD RBRAC_C          ( Tiger.ConvRecAST (Tiger.TC ID) FIELD     )
+        | ID LBRAC_SQ EXP RBRAC_SQ OF EXP   ( Tiger.ConvArrAST (Tiger.Sub ID) EXP1 EXP2)
         | LVALUE                            ( Tiger.LValueExpr LVALUE                  )
+        | ID LBRAC_C FIELD RBRAC_C          ( Tiger.ConvRecAST (Tiger.Sub ID) FIELD    )
         | ID LBRAC_R PARAM RBRAC_R          ( Tiger.ConvFunCallAST ID PARAM            )
         (* Operations *)
-        | MINUS EXP                         ( Tiger.NegationExpr EXP                   )
+        (* | MINUS EXP                         ( Tiger.NegationExpr EXP                   ) *)
         | ARITH                             ( ARITH                                    )                                      
         | LBRAC_R EXPS RBRAC_R              ( Tiger.SeqExpr EXPS                       )
         | LVALUE ASSIGN EXP                 ( Tiger.AssignExpr (LVALUE,EXP)            )
@@ -139,6 +144,7 @@ EXP     : CONST_INT                         ( Tiger.IExpr CONST_INT             
         | FOR ID ASSIGN EXP TO EXP DO EXP   ( Tiger.ConvForAST ID EXP1 EXP2 EXP3       )
         | BREAK                             ( Tiger.BreakExpr                          )
         | LET DECS IN EXPS END              ( Tiger.ConvLetAST DECS EXPS               )
+
 
 (*
 The set of declarations 
@@ -154,11 +160,9 @@ DEC     : TYPE ID EQ TY                  ( Tiger.TypeDec (ID,TY)                
         | VAR ID COLON ID ASSIGN EXP     ( Tiger.ConvVarDecTy ID1 (Tiger.TC ID2) EXP)
         | FUNCDEF                        ( Tiger.FuncDecs FUNCDEF                   )
  
-
-FUNCDEF : FUNCTION ID LBRAC_R TYFIELDS RBRAC_R EQ EXP                  ( [Tiger.ConvFunDecAST ID TYFIELDS EXP]                              )
-        | FUNCTION ID LBRAC_R TYFIELDS RBRAC_R COLON ID EQ EXP         ( [Tiger.ConvFunDecRetAST ID1 TYFIELDS (Tiger.TC ID2) EXP]           )
-        | FUNCTION ID LBRAC_R TYFIELDS RBRAC_R EQ EXP FUNCDEF          ( (Tiger.ConvFunDecAST ID TYFIELDS EXP) :: FUNCDEF                   )
-        | FUNCTION ID LBRAC_R TYFIELDS RBRAC_R COLON ID EQ EXP FUNCDEF ( (Tiger.ConvFunDecRetAST ID1 TYFIELDS (Tiger.TC ID2) EXP) :: FUNCDEF)
+(* definition of a function *)
+FUNCDEF : FUNCTION ID LBRAC_R TYFIELDS RBRAC_R EQ EXP            ( Tiger.ConvFunDecAST ID TYFIELDS EXP                      )
+        | FUNCTION ID LBRAC_R TYFIELDS RBRAC_R COLON ID EQ EXP   ( Tiger.ConvFunDecRetAST ID1 TYFIELDS (Tiger.Sub ID2) EXP  )
 
 
 (* 
@@ -170,8 +174,8 @@ Type of TYFIELDS2 is (id * type_id) list
 *)
 TYFIELDS: (* EMPTY *)                       ( Tiger.TF([])                                  )
         | ID COLON ID TYFIELDS2             ( Tiger.TF((ID1 , (Tiger.TC ID2)) :: TYFIELDS2) )
-TYFIELDS2 : ([])
-          | COMMA ID COLON ID TYFIELDS2     ( (ID1 , (Tiger.TC ID2)) :: TYFIELDS2)
+TYFIELDS2 : (* EMPTY *)                     ( []                                  )
+          | COMMA ID COLON ID TYFIELDS2     ( (ID1 , (Tiger.TC ID2)) :: TYFIELDS2 )
 
 (* TY defines the possible types *)
 TY      : ID                                ( Tiger.AlreadyTy (Tiger.TC ID) )
@@ -218,13 +222,8 @@ PARAM   : (*EMPTY*)                 ( []            )
 PARAM2 :                            ( []            )
         | COMMA EXP PARAM2          ( EXP :: PARAM2 )
 
-
-(*
-Sequence of Operation (exp1, exp2, exp3)
-*)
-
-
-
-LVALUE  : ID                            ( Tiger.SimpleVar ID           )
-        | LVALUE DOT ID                 ( Tiger.FeildVar (LVALUE , ID) )
-        | LVALUE LBRAC_SQ EXP RBRAC_SQ  ( Tiger.ArrEl (LVALUE, EXP)    )  
+(* LVALUE is something that can be assigned a value/ something that we can assign value from *)
+LVALUE : ID                             ( Tiger.SimpleVar ID                       )
+        | LVALUE DOT ID                 ( Tiger.FeildVar (LVALUE , ID)             )
+        | ID LBRAC_SQ EXP RBRAC_SQ      ( Tiger.ArrEl ((Tiger.SimpleVar ID) , EXP) )
+        | LVALUE LBRAC_SQ EXP RBRAC_SQ  ( Tiger.ArrEl (LVALUE , EXP)               )
