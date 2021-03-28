@@ -15,8 +15,8 @@ structure TIGER = struct
     val thisLexer = case CommandLine.arguments() of
                      []  => makeExprLexer TextIO.stdIn
                   |  [x] => makeFileLexer x
-                  |  _   => (TextIO.output(TextIO.stdErr, "usage: ec file"); OS.Process.exit OS.Process.failure)
-
+                  |  [x,y]  => makeFileLexer x
+                  |  _      => (TextIO.output(TextIO.stdErr, "usage: ec file\n"); OS.Process.exit OS.Process.failure)
 
 
     fun print_error (s,i:int,_) = TextIO.output(TextIO.stdErr,
@@ -24,7 +24,24 @@ structure TIGER = struct
 
     val (program,_) = ExprParser.parse (0,thisLexer,print_error,()) 
 
-    (* This prints the ast using the structure PrintAbsyn in file printast.sml *)
-    val _ = PrintAbsyn.print(TextIO.stdOut,program)
+    val args = case CommandLine.arguments() of
+                  []  => PrintAbsyn.print(TextIO.stdOut,program)
+                | [x] => PrintAbsyn.print(TextIO.stdOut,program)
+                | [x,y] =>  ( case y of 
+                                "--s" => PrintAbsyn.print(TextIO.stdOut,program)
+                              | "--p" => TextIO.output(TextIO.stdOut,(PP.compile(program)))
+                              | _     => (TextIO.output(TextIO.stdErr, "options \n --s => show AST \n --p => pretty print\n"); OS.Process.exit OS.Process.failure)
+                            )
+                | _    => (TextIO.output(TextIO.stdErr, "usage: ec file option \n option --s => show AST\n --p => pretty print\n"); OS.Process.exit OS.Process.failure)
+
+    (* val _ = PrintAbsyn.print(TextIO.stdOut,program) *)
+
+    (* val pretty_printed = let 
+                            val temp = PP.compile(program)
+                        in TextIO.output(TextIO.stdOut,temp)
+                        end *)
+
 
 end
+
+

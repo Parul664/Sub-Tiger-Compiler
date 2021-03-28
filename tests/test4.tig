@@ -1,0 +1,35 @@
+/* error : body of while loop not unit */
+(while(10>5) do 5+6;
+
+let 
+var a := 5
+var b := 6
+in
+if a > ( b := b + a ;b) then c
+else ( xyz := non ;
+ aa:=int; if true then false else true;c;
+print("");
+a := a+b + if true then a else b + c + d)
+
+end;
+let
+    function foo() : int = 0
+    function bar() : int = 1
+in
+    let
+    function foo() : int = 2
+    in
+        let
+            var stop := 0
+        in
+            let
+                function bar() : int = 3
+            in
+                0
+            end
+        end
+    end
+end
+
+
+)

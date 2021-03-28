@@ -12,3 +12,6 @@
 
 2021-03-17
 - Tested and made some changes to the tiger.grm and tiger.lex files. Also, added a print function for printing AST.
+
+2021-03-24
+- Added file target/pp.sml for pretty printing
