@@ -17,7 +17,7 @@ clean:
 	mlyacc $<
 
 
-$(EXECUTABLE) : ${MF}/compile.sml compile.mlb ${MF}/tiger.grm.sml ${MF}/tiger.lex.sml ${MF}/ast.sml ${AST_PRINTER} ${PRETTY_PRINTER}
+$(EXECUTABLE) : compile.sml compile.mlb ${MF}/tiger.grm.sml ${MF}/tiger.lex.sml ${MF}/ast.sml ${AST_PRINTER} ${PRETTY_PRINTER}
 	mlton compile.mlb
 
 tests_pp : all

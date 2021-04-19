@@ -79,7 +79,7 @@
         
 
 (* Associativity of keywords and Operators *)
-%nonassoc ASSIGN DO
+%nonassoc ASSIGN DO OF
 %left OR AND
 %nonassoc EQ NEQ LT LTE GT GTE
 %left PLUS MINUS
@@ -92,7 +92,7 @@
 %right THEN 
 %right ELSE
 %right EXP_MINUS
-%nonassoc OF
+(* %nonassoc OF *)
 (* %left DOT *)
 %nonassoc FUNCTION
 
