@@ -8,4 +8,4 @@ tiger/tiger.lex.sml    (* The lexer for the machine                    *)
 tiger/printast.sml     (*The printer for the AST*)
 target/pp.sml
 
-compile.sml
+tc.sml

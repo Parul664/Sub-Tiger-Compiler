@@ -2,18 +2,18 @@ Name        : Parul Sangwan
 
 Roll Number : 111801053
 
-The compiler works as follows. The Makefile for the tiger compiler is in the main folder itself.
+The compiler works as follows. The Makefile for the tiger compiler is in the root folder itself.
 
 
 ```$ make all```
 
-Makes the executable name compile. The compiler can then be used as ```./compile filename options```.
+Makes the executable name *tc*. The compiler can then be used as ```./tc filename options```.
 
 There are 2 options available : 
 - --p : pretty printing the code on the console
 - --s : for displaying the AST on the console
 
-The tests folder contains 3 test cases, 2 from Apple's book and one is a small program, to test the compiler.
+The tests folder contains 4 test cases, 2 from Apple's book and two is a small program, to test the compiler.
 
 ```$ make tests_ast```
 

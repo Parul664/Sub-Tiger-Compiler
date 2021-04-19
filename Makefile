@@ -1,5 +1,5 @@
 TEST=tests
-EXECUTABLE=compile
+EXECUTABLE=tc
 PRETTY_PRINTER=target/pp.sml
 AST_PRINTER=tiger/printast.sml
 MF = tiger
@@ -8,7 +8,7 @@ all : $(EXECUTABLE)
 
 clean:
 	rm -f ${MF}/*.lex.sml 
-	rm -f ${MF}/*.grm.sml ${MF}/*.grm.desc ${MF}/*.grm.sig compile
+	rm -f ${MF}/*.grm.sml ${MF}/*.grm.desc ${MF}/*.grm.sig tc
 
 %.lex.sml : %.lex
 	mllex $<
@@ -17,8 +17,8 @@ clean:
 	mlyacc $<
 
 
-$(EXECUTABLE) : compile.sml compile.mlb ${MF}/tiger.grm.sml ${MF}/tiger.lex.sml ${MF}/ast.sml ${AST_PRINTER} ${PRETTY_PRINTER}
-	mlton compile.mlb
+$(EXECUTABLE) : tc.sml tc.mlb ${MF}/tiger.grm.sml ${MF}/tiger.lex.sml ${MF}/ast.sml ${AST_PRINTER} ${PRETTY_PRINTER}
+	mlton tc.mlb
 
 tests_pp : all
 	./$(EXECUTABLE) $(TEST)/test1.tig --p
