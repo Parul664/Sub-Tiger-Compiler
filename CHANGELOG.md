@@ -15,3 +15,12 @@
 
 2021-03-24
 - Added file target/pp.sml for pretty printing
+
+2021-03-31
+- No Lab Assignment Given
+
+2021-04-07
+- Signature for Intermediate Trees
+
+2021-04-14
+- Read Canonisation
