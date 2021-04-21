@@ -137,5 +137,5 @@ id = [a-zA-Z][a-zA-Z0-9_]*;
 <STRING>\\n       => (insertStr "\n" strIn;continue());
 <STRING>\\\\      => (insertStr "\\" strIn;continue());
 <STRING>"\""      => (YYBEGIN INITIAL; Tokens.CONST_STR(!strIn,!lineRef,!lineRef));
-<STRING>"@"|"#"|"&"|"!"|"*"|"%"|"$"|"^"|"("|")"|"["|"]"|"{"|"}"|"."|"," => (insertStr yytext strIn ;continue());
+<STRING>"@"|"#"|"&"|"!"|"*"|"%"|"$"|"^"|"("|")"|"["|"]"|"{"|"}"|"."|","|"?"|":"|";"|"<"|">"|"_" => (insertStr yytext strIn ;continue());
 
