@@ -74,7 +74,8 @@ id = [a-zA-Z][a-zA-Z0-9_]*;
                               end
                             );
 
-
+<COMMENT>"\"" => (continue());
+<COMMENT>"\'" => (continue());
 
 <INITIAL>[\t\ \n]*  => ( let val old = !lineRef
                          in UpdateLine (newlineCount yytext); continue()
@@ -136,3 +137,5 @@ id = [a-zA-Z][a-zA-Z0-9_]*;
 <STRING>\\n       => (insertStr "\n" strIn;continue());
 <STRING>\\\\      => (insertStr "\\" strIn;continue());
 <STRING>"\""      => (YYBEGIN INITIAL; Tokens.CONST_STR(!strIn,!lineRef,!lineRef));
+<STRING>"@"|"#"|"&"|"!"|"*"|"%"|"$"|"^"|"("|")"|"["|"]"|"{"|"}"|"."|"," => (insertStr yytext strIn ;continue());
+
