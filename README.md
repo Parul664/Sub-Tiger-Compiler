@@ -7,13 +7,13 @@ The compiler works as follows. The Makefile for the tiger compiler is in the roo
 
 ```$ make all```
 
-Makes the executable name *tc*. The compiler can then be used as ```./tc filename options```.
+Makes the executable name *tc*. The compiler can then be used as ```./tc [option] filename [option]```.
 
 There are 2 options available : 
-- --p : pretty printing the code on the console
-- --s : for displaying the AST on the console
+- --pp : pretty printing the code on the console
+- --ast : for displaying the AST on the console
 
-The tests folder contains 4 test cases, 2 from Apple's book and two is a small program, to test the compiler.
+The tests folder contains 4 test cases, 2 from Apple's book and two are a small programs, to test the compiler.
 
 ```$ make tests_ast```
 

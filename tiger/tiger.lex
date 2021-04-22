@@ -129,7 +129,7 @@ id = [a-zA-Z][a-zA-Z0-9_]*;
 <INITIAL>"{"      => (Tokens.LBRAC_C(!lineRef,!lineRef));
 <INITIAL>"}"      => (Tokens.RBRAC_C(!lineRef,!lineRef));
 <INITIAL>"\""     => (strIn := "";YYBEGIN STRING; continue());
-<STRING>[a-zA-Z0-9+]* => (insertStr yytext strIn ;continue());
+<STRING>[a-zA-Z0-9+-]* => (insertStr yytext strIn ;continue());
 <STRING>"\ "      => ((insertStr yytext strIn ;continue()));
 <STRING>\n        => (insertStr "\n" strIn;continue());
 <STRING>\t        => (insertStr "\t" strIn;continue());
@@ -138,4 +138,3 @@ id = [a-zA-Z][a-zA-Z0-9_]*;
 <STRING>\\\\      => (insertStr "\\" strIn;continue());
 <STRING>"\""      => (YYBEGIN INITIAL; Tokens.CONST_STR(!strIn,!lineRef,!lineRef));
 <STRING>"@"|"#"|"&"|"!"|"*"|"%"|"$"|"^"|"("|")"|"["|"]"|"{"|"}"|"."|","|"?"|":"|";"|"<"|">"|"_" => (insertStr yytext strIn ;continue());
-

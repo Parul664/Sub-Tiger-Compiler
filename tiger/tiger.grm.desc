@@ -1,0 +1,2710 @@
+
+state 0:
+
+	PROGRAM : . EXPS 
+
+	CONST_INT	shift 15
+	CONST_STR	shift 14
+	NIL	shift 13
+	MINUS	shift 12
+	LBRAC_R	shift 11
+	WHILE	shift 10
+	IF	shift 9
+	FOR	shift 8
+	LET	shift 7
+	BREAK	shift 6
+	ID	shift 5
+
+	PROGRAM	goto 140
+	EXP	goto 4
+	EXPS	goto 3
+	LVALUE	goto 2
+	ARITH	goto 1
+
+	.	reduce by rule 1
+
+
+state 1:
+
+	EXP : ARITH .  (reduce by rule 13)
+
+
+
+	.	reduce by rule 13
+
+
+state 2:
+
+	EXP : LVALUE .  (reduce by rule 9)
+	EXP : LVALUE . ASSIGN EXP 
+	LVALUE : LVALUE . DOT ID 
+	LVALUE : LVALUE . LBRAC_SQ EXP RBRAC_SQ 
+
+	LBRAC_SQ	shift 18
+	DOT	shift 17
+	ASSIGN	shift 16
+
+
+	.	reduce by rule 9
+
+
+state 3:
+
+	PROGRAM : EXPS .  (reduce by rule 0)
+
+
+
+	.	reduce by rule 0
+
+
+state 4:
+
+	EXPS : EXP . EXPS2 
+	ARITH : EXP . PLUS EXP 
+	ARITH : EXP . MINUS EXP 
+	ARITH : EXP . MUL EXP 
+	ARITH : EXP . DIVIDE EXP 
+	ARITH : EXP . EQ EXP 
+	ARITH : EXP . NEQ EXP 
+	ARITH : EXP . GT EXP 
+	ARITH : EXP . LT EXP 
+	ARITH : EXP . LTE EXP 
+	ARITH : EXP . GTE EXP 
+	ARITH : EXP . AND EXP 
+	ARITH : EXP . OR EXP 
+
+	PLUS	shift 32
+	MINUS	shift 31
+	MUL	shift 30
+	DIVIDE	shift 29
+	SEMICOLON	shift 28
+	EQ	shift 27
+	NEQ	shift 26
+	LT	shift 25
+	GT	shift 24
+	GTE	shift 23
+	LTE	shift 22
+	OR	shift 21
+	AND	shift 20
+
+	EXPS2	goto 19
+
+	.	reduce by rule 3
+
+
+state 5:
+
+	EXP : ID . LBRAC_SQ EXP RBRAC_SQ OF EXP 
+	EXP : ID . LBRAC_C FIELD RBRAC_C 
+	EXP : ID . LBRAC_R PARAM RBRAC_R 
+	LVALUE : ID .  (reduce by rule 57)
+	LVALUE : ID . LBRAC_SQ EXP RBRAC_SQ 
+
+	LBRAC_C	shift 35
+	LBRAC_SQ	shift 34
+	LBRAC_R	shift 33
+
+
+	.	reduce by rule 57
+
+
+state 6:
+
+	EXP : BREAK .  (reduce by rule 20)
+
+
+
+	.	reduce by rule 20
+
+
+state 7:
+
+	EXP : LET . DECS IN EXPS END 
+
+	FUNCTION	shift 41
+	VAR	shift 40
+	TYPE	shift 39
+
+	DEC	goto 38
+	DECS	goto 37
+	FUNCDEF	goto 36
+
+	.	reduce by rule 22
+
+
+state 8:
+
+	EXP : FOR . ID ASSIGN EXP TO EXP DO EXP 
+
+	ID	shift 42
+
+
+	.	error
+
+
+state 9:
+
+	EXP : IF . EXP THEN EXP ELSE EXP 
+	EXP : IF . EXP THEN EXP 
+
+	CONST_INT	shift 15
+	CONST_STR	shift 14
+	NIL	shift 13
+	MINUS	shift 12
+	LBRAC_R	shift 11
+	WHILE	shift 10
+	IF	shift 9
+	FOR	shift 8
+	LET	shift 7
+	BREAK	shift 6
+	ID	shift 5
+
+	EXP	goto 43
+	LVALUE	goto 2
+	ARITH	goto 1
+
+	.	error
+
+
+state 10:
+
+	EXP : WHILE . EXP DO EXP 
+
+	CONST_INT	shift 15
+	CONST_STR	shift 14
+	NIL	shift 13
+	MINUS	shift 12
+	LBRAC_R	shift 11
+	WHILE	shift 10
+	IF	shift 9
+	FOR	shift 8
+	LET	shift 7
+	BREAK	shift 6
+	ID	shift 5
+
+	EXP	goto 44
+	LVALUE	goto 2
+	ARITH	goto 1
+
+	.	error
+
+
+state 11:
+
+	EXP : LBRAC_R . EXPS RBRAC_R 
+
+	CONST_INT	shift 15
+	CONST_STR	shift 14
+	NIL	shift 13
+	MINUS	shift 12
+	LBRAC_R	shift 11
+	WHILE	shift 10
+	IF	shift 9
+	FOR	shift 8
+	LET	shift 7
+	BREAK	shift 6
+	ID	shift 5
+
+	EXP	goto 4
+	EXPS	goto 45
+	LVALUE	goto 2
+	ARITH	goto 1
+
+	.	reduce by rule 1
+
+
+state 12:
+
+	EXP : MINUS . EXP 
+
+	CONST_INT	shift 15
+	CONST_STR	shift 14
+	NIL	shift 13
+	MINUS	shift 12
+	LBRAC_R	shift 11
+	WHILE	shift 10
+	IF	shift 9
+	FOR	shift 8
+	LET	shift 7
+	BREAK	shift 6
+	ID	shift 5
+
+	EXP	goto 46
+	LVALUE	goto 2
+	ARITH	goto 1
+
+	.	error
+
+
+state 13:
+
+	EXP : NIL .  (reduce by rule 7)
+
+
+
+	.	reduce by rule 7
+
+
+state 14:
+
+	EXP : CONST_STR .  (reduce by rule 6)
+
+
+
+	.	reduce by rule 6
+
+
+state 15:
+
+	EXP : CONST_INT .  (reduce by rule 5)
+
+
+
+	.	reduce by rule 5
+
+
+state 16:
+
+	EXP : LVALUE ASSIGN . EXP 
+
+	CONST_INT	shift 15
+	CONST_STR	shift 14
+	NIL	shift 13
+	MINUS	shift 12
+	LBRAC_R	shift 11
+	WHILE	shift 10
+	IF	shift 9
+	FOR	shift 8
+	LET	shift 7
+	BREAK	shift 6
+	ID	shift 5
+
+	EXP	goto 47
+	LVALUE	goto 2
+	ARITH	goto 1
+
+	.	error
+
+
+state 17:
+
+	LVALUE : LVALUE DOT . ID 
+
+	ID	shift 48
+
+
+	.	error
+
+
+state 18:
+
+	LVALUE : LVALUE LBRAC_SQ . EXP RBRAC_SQ 
+
+	CONST_INT	shift 15
+	CONST_STR	shift 14
+	NIL	shift 13
+	MINUS	shift 12
+	LBRAC_R	shift 11
+	WHILE	shift 10
+	IF	shift 9
+	FOR	shift 8
+	LET	shift 7
+	BREAK	shift 6
+	ID	shift 5
+
+	EXP	goto 49
+	LVALUE	goto 2
+	ARITH	goto 1
+
+	.	error
+
+
+state 19:
+
+	EXPS : EXP EXPS2 .  (reduce by rule 2)
+
+
+
+	.	reduce by rule 2
+
+
+state 20:
+
+	ARITH : EXP AND . EXP 
+
+	CONST_INT	shift 15
+	CONST_STR	shift 14
+	NIL	shift 13
+	MINUS	shift 12
+	LBRAC_R	shift 11
+	WHILE	shift 10
+	IF	shift 9
+	FOR	shift 8
+	LET	shift 7
+	BREAK	shift 6
+	ID	shift 5
+
+	EXP	goto 50
+	LVALUE	goto 2
+	ARITH	goto 1
+
+	.	error
+
+
+state 21:
+
+	ARITH : EXP OR . EXP 
+
+	CONST_INT	shift 15
+	CONST_STR	shift 14
+	NIL	shift 13
+	MINUS	shift 12
+	LBRAC_R	shift 11
+	WHILE	shift 10
+	IF	shift 9
+	FOR	shift 8
+	LET	shift 7
+	BREAK	shift 6
+	ID	shift 5
+
+	EXP	goto 51
+	LVALUE	goto 2
+	ARITH	goto 1
+
+	.	error
+
+
+state 22:
+
+	ARITH : EXP LTE . EXP 
+
+	CONST_INT	shift 15
+	CONST_STR	shift 14
+	NIL	shift 13
+	MINUS	shift 12
+	LBRAC_R	shift 11
+	WHILE	shift 10
+	IF	shift 9
+	FOR	shift 8
+	LET	shift 7
+	BREAK	shift 6
+	ID	shift 5
+
+	EXP	goto 52
+	LVALUE	goto 2
+	ARITH	goto 1
+
+	.	error
+
+
+state 23:
+
+	ARITH : EXP GTE . EXP 
+
+	CONST_INT	shift 15
+	CONST_STR	shift 14
+	NIL	shift 13
+	MINUS	shift 12
+	LBRAC_R	shift 11
+	WHILE	shift 10
+	IF	shift 9
+	FOR	shift 8
+	LET	shift 7
+	BREAK	shift 6
+	ID	shift 5
+
+	EXP	goto 53
+	LVALUE	goto 2
+	ARITH	goto 1
+
+	.	error
+
+
+state 24:
+
+	ARITH : EXP GT . EXP 
+
+	CONST_INT	shift 15
+	CONST_STR	shift 14
+	NIL	shift 13
+	MINUS	shift 12
+	LBRAC_R	shift 11
+	WHILE	shift 10
+	IF	shift 9
+	FOR	shift 8
+	LET	shift 7
+	BREAK	shift 6
+	ID	shift 5
+
+	EXP	goto 54
+	LVALUE	goto 2
+	ARITH	goto 1
+
+	.	error
+
+
+state 25:
+
+	ARITH : EXP LT . EXP 
+
+	CONST_INT	shift 15
+	CONST_STR	shift 14
+	NIL	shift 13
+	MINUS	shift 12
+	LBRAC_R	shift 11
+	WHILE	shift 10
+	IF	shift 9
+	FOR	shift 8
+	LET	shift 7
+	BREAK	shift 6
+	ID	shift 5
+
+	EXP	goto 55
+	LVALUE	goto 2
+	ARITH	goto 1
+
+	.	error
+
+
+state 26:
+
+	ARITH : EXP NEQ . EXP 
+
+	CONST_INT	shift 15
+	CONST_STR	shift 14
+	NIL	shift 13
+	MINUS	shift 12
+	LBRAC_R	shift 11
+	WHILE	shift 10
+	IF	shift 9
+	FOR	shift 8
+	LET	shift 7
+	BREAK	shift 6
+	ID	shift 5
+
+	EXP	goto 56
+	LVALUE	goto 2
+	ARITH	goto 1
+
+	.	error
+
+
+state 27:
+
+	ARITH : EXP EQ . EXP 
+
+	CONST_INT	shift 15
+	CONST_STR	shift 14
+	NIL	shift 13
+	MINUS	shift 12
+	LBRAC_R	shift 11
+	WHILE	shift 10
+	IF	shift 9
+	FOR	shift 8
+	LET	shift 7
+	BREAK	shift 6
+	ID	shift 5
+
+	EXP	goto 57
+	LVALUE	goto 2
+	ARITH	goto 1
+
+	.	error
+
+
+state 28:
+
+	EXPS2 : SEMICOLON . EXP EXPS2 
+
+	CONST_INT	shift 15
+	CONST_STR	shift 14
+	NIL	shift 13
+	MINUS	shift 12
+	LBRAC_R	shift 11
+	WHILE	shift 10
+	IF	shift 9
+	FOR	shift 8
+	LET	shift 7
+	BREAK	shift 6
+	ID	shift 5
+
+	EXP	goto 58
+	LVALUE	goto 2
+	ARITH	goto 1
+
+	.	error
+
+
+state 29:
+
+	ARITH : EXP DIVIDE . EXP 
+
+	CONST_INT	shift 15
+	CONST_STR	shift 14
+	NIL	shift 13
+	MINUS	shift 12
+	LBRAC_R	shift 11
+	WHILE	shift 10
+	IF	shift 9
+	FOR	shift 8
+	LET	shift 7
+	BREAK	shift 6
+	ID	shift 5
+
+	EXP	goto 59
+	LVALUE	goto 2
+	ARITH	goto 1
+
+	.	error
+
+
+state 30:
+
+	ARITH : EXP MUL . EXP 
+
+	CONST_INT	shift 15
+	CONST_STR	shift 14
+	NIL	shift 13
+	MINUS	shift 12
+	LBRAC_R	shift 11
+	WHILE	shift 10
+	IF	shift 9
+	FOR	shift 8
+	LET	shift 7
+	BREAK	shift 6
+	ID	shift 5
+
+	EXP	goto 60
+	LVALUE	goto 2
+	ARITH	goto 1
+
+	.	error
+
+
+state 31:
+
+	ARITH : EXP MINUS . EXP 
+
+	CONST_INT	shift 15
+	CONST_STR	shift 14
+	NIL	shift 13
+	MINUS	shift 12
+	LBRAC_R	shift 11
+	WHILE	shift 10
+	IF	shift 9
+	FOR	shift 8
+	LET	shift 7
+	BREAK	shift 6
+	ID	shift 5
+
+	EXP	goto 61
+	LVALUE	goto 2
+	ARITH	goto 1
+
+	.	error
+
+
+state 32:
+
+	ARITH : EXP PLUS . EXP 
+
+	CONST_INT	shift 15
+	CONST_STR	shift 14
+	NIL	shift 13
+	MINUS	shift 12
+	LBRAC_R	shift 11
+	WHILE	shift 10
+	IF	shift 9
+	FOR	shift 8
+	LET	shift 7
+	BREAK	shift 6
+	ID	shift 5
+
+	EXP	goto 62
+	LVALUE	goto 2
+	ARITH	goto 1
+
+	.	error
+
+
+state 33:
+
+	EXP : ID LBRAC_R . PARAM RBRAC_R 
+
+	CONST_INT	shift 15
+	CONST_STR	shift 14
+	NIL	shift 13
+	MINUS	shift 12
+	LBRAC_R	shift 11
+	WHILE	shift 10
+	IF	shift 9
+	FOR	shift 8
+	LET	shift 7
+	BREAK	shift 6
+	ID	shift 5
+
+	EXP	goto 64
+	PARAM	goto 63
+	LVALUE	goto 2
+	ARITH	goto 1
+
+	.	reduce by rule 53
+
+
+state 34:
+
+	EXP : ID LBRAC_SQ . EXP RBRAC_SQ OF EXP 
+	LVALUE : ID LBRAC_SQ . EXP RBRAC_SQ 
+
+	CONST_INT	shift 15
+	CONST_STR	shift 14
+	NIL	shift 13
+	MINUS	shift 12
+	LBRAC_R	shift 11
+	WHILE	shift 10
+	IF	shift 9
+	FOR	shift 8
+	LET	shift 7
+	BREAK	shift 6
+	ID	shift 5
+
+	EXP	goto 65
+	LVALUE	goto 2
+	ARITH	goto 1
+
+	.	error
+
+
+state 35:
+
+	EXP : ID LBRAC_C . FIELD RBRAC_C 
+
+	ID	shift 67
+
+	FIELD	goto 66
+
+	.	reduce by rule 49
+
+
+state 36:
+
+	DEC : FUNCDEF .  (reduce by rule 27)
+
+
+
+	.	reduce by rule 27
+
+
+state 37:
+
+	EXP : LET DECS . IN EXPS END 
+
+	IN	shift 68
+
+
+	.	error
+
+
+state 38:
+
+	DECS : DEC . DECS 
+
+	FUNCTION	shift 41
+	VAR	shift 40
+	TYPE	shift 39
+
+	DEC	goto 38
+	DECS	goto 69
+	FUNCDEF	goto 36
+
+	.	reduce by rule 22
+
+
+state 39:
+
+	DEC : TYPE . ID EQ TY 
+
+	ID	shift 70
+
+
+	.	error
+
+
+state 40:
+
+	DEC : VAR . ID ASSIGN EXP 
+	DEC : VAR . ID COLON ID ASSIGN EXP 
+
+	ID	shift 71
+
+
+	.	error
+
+
+state 41:
+
+	FUNCDEF : FUNCTION . ID LBRAC_R TYFIELDS RBRAC_R EQ EXP 
+	FUNCDEF : FUNCTION . ID LBRAC_R TYFIELDS RBRAC_R COLON ID EQ EXP 
+
+	ID	shift 72
+
+
+	.	error
+
+
+state 42:
+
+	EXP : FOR ID . ASSIGN EXP TO EXP DO EXP 
+
+	ASSIGN	shift 73
+
+
+	.	error
+
+
+state 43:
+
+	EXP : IF EXP . THEN EXP ELSE EXP 
+	EXP : IF EXP . THEN EXP 
+	ARITH : EXP . PLUS EXP 
+	ARITH : EXP . MINUS EXP 
+	ARITH : EXP . MUL EXP 
+	ARITH : EXP . DIVIDE EXP 
+	ARITH : EXP . EQ EXP 
+	ARITH : EXP . NEQ EXP 
+	ARITH : EXP . GT EXP 
+	ARITH : EXP . LT EXP 
+	ARITH : EXP . LTE EXP 
+	ARITH : EXP . GTE EXP 
+	ARITH : EXP . AND EXP 
+	ARITH : EXP . OR EXP 
+
+	PLUS	shift 32
+	MINUS	shift 31
+	MUL	shift 30
+	DIVIDE	shift 29
+	THEN	shift 74
+	EQ	shift 27
+	NEQ	shift 26
+	LT	shift 25
+	GT	shift 24
+	GTE	shift 23
+	LTE	shift 22
+	OR	shift 21
+	AND	shift 20
+
+
+	.	error
+
+
+state 44:
+
+	EXP : WHILE EXP . DO EXP 
+	ARITH : EXP . PLUS EXP 
+	ARITH : EXP . MINUS EXP 
+	ARITH : EXP . MUL EXP 
+	ARITH : EXP . DIVIDE EXP 
+	ARITH : EXP . EQ EXP 
+	ARITH : EXP . NEQ EXP 
+	ARITH : EXP . GT EXP 
+	ARITH : EXP . LT EXP 
+	ARITH : EXP . LTE EXP 
+	ARITH : EXP . GTE EXP 
+	ARITH : EXP . AND EXP 
+	ARITH : EXP . OR EXP 
+
+	PLUS	shift 32
+	MINUS	shift 31
+	MUL	shift 30
+	DIVIDE	shift 29
+	EQ	shift 27
+	NEQ	shift 26
+	LT	shift 25
+	GT	shift 24
+	GTE	shift 23
+	LTE	shift 22
+	OR	shift 21
+	AND	shift 20
+	DO	shift 75
+
+
+	.	error
+
+
+state 45:
+
+	EXP : LBRAC_R EXPS . RBRAC_R 
+
+	RBRAC_R	shift 76
+
+
+	.	error
+
+
+state 46:
+
+	EXP : MINUS EXP .  (reduce by rule 12)
+	ARITH : EXP . PLUS EXP 
+	ARITH : EXP . MINUS EXP 
+	ARITH : EXP . MUL EXP 
+	ARITH : EXP . DIVIDE EXP 
+	ARITH : EXP . EQ EXP 
+	ARITH : EXP . NEQ EXP 
+	ARITH : EXP . GT EXP 
+	ARITH : EXP . LT EXP 
+	ARITH : EXP . LTE EXP 
+	ARITH : EXP . GTE EXP 
+	ARITH : EXP . AND EXP 
+	ARITH : EXP . OR EXP 
+
+
+
+	.	reduce by rule 12
+
+
+state 47:
+
+	EXP : LVALUE ASSIGN EXP .  (reduce by rule 15)
+	ARITH : EXP . PLUS EXP 
+	ARITH : EXP . MINUS EXP 
+	ARITH : EXP . MUL EXP 
+	ARITH : EXP . DIVIDE EXP 
+	ARITH : EXP . EQ EXP 
+	ARITH : EXP . NEQ EXP 
+	ARITH : EXP . GT EXP 
+	ARITH : EXP . LT EXP 
+	ARITH : EXP . LTE EXP 
+	ARITH : EXP . GTE EXP 
+	ARITH : EXP . AND EXP 
+	ARITH : EXP . OR EXP 
+
+	PLUS	shift 32
+	MINUS	shift 31
+	MUL	shift 30
+	DIVIDE	shift 29
+	EQ	shift 27
+	NEQ	shift 26
+	LT	shift 25
+	GT	shift 24
+	GTE	shift 23
+	LTE	shift 22
+	OR	shift 21
+	AND	shift 20
+
+
+	.	reduce by rule 15
+
+
+state 48:
+
+	LVALUE : LVALUE DOT ID .  (reduce by rule 58)
+
+
+
+	.	reduce by rule 58
+
+
+state 49:
+
+	LVALUE : LVALUE LBRAC_SQ EXP . RBRAC_SQ 
+	ARITH : EXP . PLUS EXP 
+	ARITH : EXP . MINUS EXP 
+	ARITH : EXP . MUL EXP 
+	ARITH : EXP . DIVIDE EXP 
+	ARITH : EXP . EQ EXP 
+	ARITH : EXP . NEQ EXP 
+	ARITH : EXP . GT EXP 
+	ARITH : EXP . LT EXP 
+	ARITH : EXP . LTE EXP 
+	ARITH : EXP . GTE EXP 
+	ARITH : EXP . AND EXP 
+	ARITH : EXP . OR EXP 
+
+	PLUS	shift 32
+	MINUS	shift 31
+	MUL	shift 30
+	DIVIDE	shift 29
+	RBRAC_SQ	shift 77
+	EQ	shift 27
+	NEQ	shift 26
+	LT	shift 25
+	GT	shift 24
+	GTE	shift 23
+	LTE	shift 22
+	OR	shift 21
+	AND	shift 20
+
+
+	.	error
+
+
+state 50:
+
+	ARITH : EXP . PLUS EXP 
+	ARITH : EXP . MINUS EXP 
+	ARITH : EXP . MUL EXP 
+	ARITH : EXP . DIVIDE EXP 
+	ARITH : EXP . EQ EXP 
+	ARITH : EXP . NEQ EXP 
+	ARITH : EXP . GT EXP 
+	ARITH : EXP . LT EXP 
+	ARITH : EXP . LTE EXP 
+	ARITH : EXP . GTE EXP 
+	ARITH : EXP . AND EXP 
+	ARITH : EXP AND EXP .  (reduce by rule 47)
+	ARITH : EXP . OR EXP 
+
+	PLUS	shift 32
+	MINUS	shift 31
+	MUL	shift 30
+	DIVIDE	shift 29
+	EQ	shift 27
+	NEQ	shift 26
+	LT	shift 25
+	GT	shift 24
+	GTE	shift 23
+	LTE	shift 22
+
+
+	.	reduce by rule 47
+
+
+state 51:
+
+	ARITH : EXP . PLUS EXP 
+	ARITH : EXP . MINUS EXP 
+	ARITH : EXP . MUL EXP 
+	ARITH : EXP . DIVIDE EXP 
+	ARITH : EXP . EQ EXP 
+	ARITH : EXP . NEQ EXP 
+	ARITH : EXP . GT EXP 
+	ARITH : EXP . LT EXP 
+	ARITH : EXP . LTE EXP 
+	ARITH : EXP . GTE EXP 
+	ARITH : EXP . AND EXP 
+	ARITH : EXP . OR EXP 
+	ARITH : EXP OR EXP .  (reduce by rule 48)
+
+	PLUS	shift 32
+	MINUS	shift 31
+	MUL	shift 30
+	DIVIDE	shift 29
+	EQ	shift 27
+	NEQ	shift 26
+	LT	shift 25
+	GT	shift 24
+	GTE	shift 23
+	LTE	shift 22
+
+
+	.	reduce by rule 48
+
+
+state 52:
+
+	ARITH : EXP . PLUS EXP 
+	ARITH : EXP . MINUS EXP 
+	ARITH : EXP . MUL EXP 
+	ARITH : EXP . DIVIDE EXP 
+	ARITH : EXP . EQ EXP 
+	ARITH : EXP . NEQ EXP 
+	ARITH : EXP . GT EXP 
+	ARITH : EXP . LT EXP 
+	ARITH : EXP . LTE EXP 
+	ARITH : EXP LTE EXP .  (reduce by rule 45)
+	ARITH : EXP . GTE EXP 
+	ARITH : EXP . AND EXP 
+	ARITH : EXP . OR EXP 
+
+	PLUS	shift 32
+	MINUS	shift 31
+	MUL	shift 30
+	DIVIDE	shift 29
+	EOF	reduce by rule 45
+	RBRAC_C	reduce by rule 45
+	RBRAC_SQ	reduce by rule 45
+	RBRAC_R	reduce by rule 45
+	SEMICOLON	reduce by rule 45
+	THEN	reduce by rule 45
+	ELSE	reduce by rule 45
+	END	reduce by rule 45
+	FUNCTION	reduce by rule 45
+	COMMA	reduce by rule 45
+	OR	reduce by rule 45
+	AND	reduce by rule 45
+	VAR	reduce by rule 45
+	TYPE	reduce by rule 45
+	IN	reduce by rule 45
+	TO	reduce by rule 45
+	DO	reduce by rule 45
+
+
+	.	error
+
+
+state 53:
+
+	ARITH : EXP . PLUS EXP 
+	ARITH : EXP . MINUS EXP 
+	ARITH : EXP . MUL EXP 
+	ARITH : EXP . DIVIDE EXP 
+	ARITH : EXP . EQ EXP 
+	ARITH : EXP . NEQ EXP 
+	ARITH : EXP . GT EXP 
+	ARITH : EXP . LT EXP 
+	ARITH : EXP . LTE EXP 
+	ARITH : EXP . GTE EXP 
+	ARITH : EXP GTE EXP .  (reduce by rule 46)
+	ARITH : EXP . AND EXP 
+	ARITH : EXP . OR EXP 
+
+	PLUS	shift 32
+	MINUS	shift 31
+	MUL	shift 30
+	DIVIDE	shift 29
+	EOF	reduce by rule 46
+	RBRAC_C	reduce by rule 46
+	RBRAC_SQ	reduce by rule 46
+	RBRAC_R	reduce by rule 46
+	SEMICOLON	reduce by rule 46
+	THEN	reduce by rule 46
+	ELSE	reduce by rule 46
+	END	reduce by rule 46
+	FUNCTION	reduce by rule 46
+	COMMA	reduce by rule 46
+	OR	reduce by rule 46
+	AND	reduce by rule 46
+	VAR	reduce by rule 46
+	TYPE	reduce by rule 46
+	IN	reduce by rule 46
+	TO	reduce by rule 46
+	DO	reduce by rule 46
+
+
+	.	error
+
+
+state 54:
+
+	ARITH : EXP . PLUS EXP 
+	ARITH : EXP . MINUS EXP 
+	ARITH : EXP . MUL EXP 
+	ARITH : EXP . DIVIDE EXP 
+	ARITH : EXP . EQ EXP 
+	ARITH : EXP . NEQ EXP 
+	ARITH : EXP . GT EXP 
+	ARITH : EXP GT EXP .  (reduce by rule 43)
+	ARITH : EXP . LT EXP 
+	ARITH : EXP . LTE EXP 
+	ARITH : EXP . GTE EXP 
+	ARITH : EXP . AND EXP 
+	ARITH : EXP . OR EXP 
+
+	PLUS	shift 32
+	MINUS	shift 31
+	MUL	shift 30
+	DIVIDE	shift 29
+	EOF	reduce by rule 43
+	RBRAC_C	reduce by rule 43
+	RBRAC_SQ	reduce by rule 43
+	RBRAC_R	reduce by rule 43
+	SEMICOLON	reduce by rule 43
+	THEN	reduce by rule 43
+	ELSE	reduce by rule 43
+	END	reduce by rule 43
+	FUNCTION	reduce by rule 43
+	COMMA	reduce by rule 43
+	OR	reduce by rule 43
+	AND	reduce by rule 43
+	VAR	reduce by rule 43
+	TYPE	reduce by rule 43
+	IN	reduce by rule 43
+	TO	reduce by rule 43
+	DO	reduce by rule 43
+
+
+	.	error
+
+
+state 55:
+
+	ARITH : EXP . PLUS EXP 
+	ARITH : EXP . MINUS EXP 
+	ARITH : EXP . MUL EXP 
+	ARITH : EXP . DIVIDE EXP 
+	ARITH : EXP . EQ EXP 
+	ARITH : EXP . NEQ EXP 
+	ARITH : EXP . GT EXP 
+	ARITH : EXP . LT EXP 
+	ARITH : EXP LT EXP .  (reduce by rule 44)
+	ARITH : EXP . LTE EXP 
+	ARITH : EXP . GTE EXP 
+	ARITH : EXP . AND EXP 
+	ARITH : EXP . OR EXP 
+
+	PLUS	shift 32
+	MINUS	shift 31
+	MUL	shift 30
+	DIVIDE	shift 29
+	EOF	reduce by rule 44
+	RBRAC_C	reduce by rule 44
+	RBRAC_SQ	reduce by rule 44
+	RBRAC_R	reduce by rule 44
+	SEMICOLON	reduce by rule 44
+	THEN	reduce by rule 44
+	ELSE	reduce by rule 44
+	END	reduce by rule 44
+	FUNCTION	reduce by rule 44
+	COMMA	reduce by rule 44
+	OR	reduce by rule 44
+	AND	reduce by rule 44
+	VAR	reduce by rule 44
+	TYPE	reduce by rule 44
+	IN	reduce by rule 44
+	TO	reduce by rule 44
+	DO	reduce by rule 44
+
+
+	.	error
+
+
+state 56:
+
+	ARITH : EXP . PLUS EXP 
+	ARITH : EXP . MINUS EXP 
+	ARITH : EXP . MUL EXP 
+	ARITH : EXP . DIVIDE EXP 
+	ARITH : EXP . EQ EXP 
+	ARITH : EXP . NEQ EXP 
+	ARITH : EXP NEQ EXP .  (reduce by rule 42)
+	ARITH : EXP . GT EXP 
+	ARITH : EXP . LT EXP 
+	ARITH : EXP . LTE EXP 
+	ARITH : EXP . GTE EXP 
+	ARITH : EXP . AND EXP 
+	ARITH : EXP . OR EXP 
+
+	PLUS	shift 32
+	MINUS	shift 31
+	MUL	shift 30
+	DIVIDE	shift 29
+	EOF	reduce by rule 42
+	RBRAC_C	reduce by rule 42
+	RBRAC_SQ	reduce by rule 42
+	RBRAC_R	reduce by rule 42
+	SEMICOLON	reduce by rule 42
+	THEN	reduce by rule 42
+	ELSE	reduce by rule 42
+	END	reduce by rule 42
+	FUNCTION	reduce by rule 42
+	COMMA	reduce by rule 42
+	OR	reduce by rule 42
+	AND	reduce by rule 42
+	VAR	reduce by rule 42
+	TYPE	reduce by rule 42
+	IN	reduce by rule 42
+	TO	reduce by rule 42
+	DO	reduce by rule 42
+
+
+	.	error
+
+
+state 57:
+
+	ARITH : EXP . PLUS EXP 
+	ARITH : EXP . MINUS EXP 
+	ARITH : EXP . MUL EXP 
+	ARITH : EXP . DIVIDE EXP 
+	ARITH : EXP . EQ EXP 
+	ARITH : EXP EQ EXP .  (reduce by rule 41)
+	ARITH : EXP . NEQ EXP 
+	ARITH : EXP . GT EXP 
+	ARITH : EXP . LT EXP 
+	ARITH : EXP . LTE EXP 
+	ARITH : EXP . GTE EXP 
+	ARITH : EXP . AND EXP 
+	ARITH : EXP . OR EXP 
+
+	PLUS	shift 32
+	MINUS	shift 31
+	MUL	shift 30
+	DIVIDE	shift 29
+	EOF	reduce by rule 41
+	RBRAC_C	reduce by rule 41
+	RBRAC_SQ	reduce by rule 41
+	RBRAC_R	reduce by rule 41
+	SEMICOLON	reduce by rule 41
+	THEN	reduce by rule 41
+	ELSE	reduce by rule 41
+	END	reduce by rule 41
+	FUNCTION	reduce by rule 41
+	COMMA	reduce by rule 41
+	OR	reduce by rule 41
+	AND	reduce by rule 41
+	VAR	reduce by rule 41
+	TYPE	reduce by rule 41
+	IN	reduce by rule 41
+	TO	reduce by rule 41
+	DO	reduce by rule 41
+
+
+	.	error
+
+
+state 58:
+
+	EXPS2 : SEMICOLON EXP . EXPS2 
+	ARITH : EXP . PLUS EXP 
+	ARITH : EXP . MINUS EXP 
+	ARITH : EXP . MUL EXP 
+	ARITH : EXP . DIVIDE EXP 
+	ARITH : EXP . EQ EXP 
+	ARITH : EXP . NEQ EXP 
+	ARITH : EXP . GT EXP 
+	ARITH : EXP . LT EXP 
+	ARITH : EXP . LTE EXP 
+	ARITH : EXP . GTE EXP 
+	ARITH : EXP . AND EXP 
+	ARITH : EXP . OR EXP 
+
+	PLUS	shift 32
+	MINUS	shift 31
+	MUL	shift 30
+	DIVIDE	shift 29
+	SEMICOLON	shift 28
+	EQ	shift 27
+	NEQ	shift 26
+	LT	shift 25
+	GT	shift 24
+	GTE	shift 23
+	LTE	shift 22
+	OR	shift 21
+	AND	shift 20
+
+	EXPS2	goto 78
+
+	.	reduce by rule 3
+
+
+state 59:
+
+	ARITH : EXP . PLUS EXP 
+	ARITH : EXP . MINUS EXP 
+	ARITH : EXP . MUL EXP 
+	ARITH : EXP . DIVIDE EXP 
+	ARITH : EXP DIVIDE EXP .  (reduce by rule 40)
+	ARITH : EXP . EQ EXP 
+	ARITH : EXP . NEQ EXP 
+	ARITH : EXP . GT EXP 
+	ARITH : EXP . LT EXP 
+	ARITH : EXP . LTE EXP 
+	ARITH : EXP . GTE EXP 
+	ARITH : EXP . AND EXP 
+	ARITH : EXP . OR EXP 
+
+
+
+	.	reduce by rule 40
+
+
+state 60:
+
+	ARITH : EXP . PLUS EXP 
+	ARITH : EXP . MINUS EXP 
+	ARITH : EXP . MUL EXP 
+	ARITH : EXP MUL EXP .  (reduce by rule 39)
+	ARITH : EXP . DIVIDE EXP 
+	ARITH : EXP . EQ EXP 
+	ARITH : EXP . NEQ EXP 
+	ARITH : EXP . GT EXP 
+	ARITH : EXP . LT EXP 
+	ARITH : EXP . LTE EXP 
+	ARITH : EXP . GTE EXP 
+	ARITH : EXP . AND EXP 
+	ARITH : EXP . OR EXP 
+
+
+
+	.	reduce by rule 39
+
+
+state 61:
+
+	ARITH : EXP . PLUS EXP 
+	ARITH : EXP . MINUS EXP 
+	ARITH : EXP MINUS EXP .  (reduce by rule 38)
+	ARITH : EXP . MUL EXP 
+	ARITH : EXP . DIVIDE EXP 
+	ARITH : EXP . EQ EXP 
+	ARITH : EXP . NEQ EXP 
+	ARITH : EXP . GT EXP 
+	ARITH : EXP . LT EXP 
+	ARITH : EXP . LTE EXP 
+	ARITH : EXP . GTE EXP 
+	ARITH : EXP . AND EXP 
+	ARITH : EXP . OR EXP 
+
+	MUL	shift 30
+	DIVIDE	shift 29
+
+
+	.	reduce by rule 38
+
+
+state 62:
+
+	ARITH : EXP . PLUS EXP 
+	ARITH : EXP PLUS EXP .  (reduce by rule 37)
+	ARITH : EXP . MINUS EXP 
+	ARITH : EXP . MUL EXP 
+	ARITH : EXP . DIVIDE EXP 
+	ARITH : EXP . EQ EXP 
+	ARITH : EXP . NEQ EXP 
+	ARITH : EXP . GT EXP 
+	ARITH : EXP . LT EXP 
+	ARITH : EXP . LTE EXP 
+	ARITH : EXP . GTE EXP 
+	ARITH : EXP . AND EXP 
+	ARITH : EXP . OR EXP 
+
+	MUL	shift 30
+	DIVIDE	shift 29
+
+
+	.	reduce by rule 37
+
+
+state 63:
+
+	EXP : ID LBRAC_R PARAM . RBRAC_R 
+
+	RBRAC_R	shift 79
+
+
+	.	error
+
+
+state 64:
+
+	PARAM : EXP . PARAM2 
+	ARITH : EXP . PLUS EXP 
+	ARITH : EXP . MINUS EXP 
+	ARITH : EXP . MUL EXP 
+	ARITH : EXP . DIVIDE EXP 
+	ARITH : EXP . EQ EXP 
+	ARITH : EXP . NEQ EXP 
+	ARITH : EXP . GT EXP 
+	ARITH : EXP . LT EXP 
+	ARITH : EXP . LTE EXP 
+	ARITH : EXP . GTE EXP 
+	ARITH : EXP . AND EXP 
+	ARITH : EXP . OR EXP 
+
+	PLUS	shift 32
+	MINUS	shift 31
+	MUL	shift 30
+	DIVIDE	shift 29
+	COMMA	shift 81
+	EQ	shift 27
+	NEQ	shift 26
+	LT	shift 25
+	GT	shift 24
+	GTE	shift 23
+	LTE	shift 22
+	OR	shift 21
+	AND	shift 20
+
+	PARAM2	goto 80
+
+	.	reduce by rule 55
+
+
+state 65:
+
+	EXP : ID LBRAC_SQ EXP . RBRAC_SQ OF EXP 
+	LVALUE : ID LBRAC_SQ EXP . RBRAC_SQ 
+	ARITH : EXP . PLUS EXP 
+	ARITH : EXP . MINUS EXP 
+	ARITH : EXP . MUL EXP 
+	ARITH : EXP . DIVIDE EXP 
+	ARITH : EXP . EQ EXP 
+	ARITH : EXP . NEQ EXP 
+	ARITH : EXP . GT EXP 
+	ARITH : EXP . LT EXP 
+	ARITH : EXP . LTE EXP 
+	ARITH : EXP . GTE EXP 
+	ARITH : EXP . AND EXP 
+	ARITH : EXP . OR EXP 
+
+	PLUS	shift 32
+	MINUS	shift 31
+	MUL	shift 30
+	DIVIDE	shift 29
+	RBRAC_SQ	shift 82
+	EQ	shift 27
+	NEQ	shift 26
+	LT	shift 25
+	GT	shift 24
+	GTE	shift 23
+	LTE	shift 22
+	OR	shift 21
+	AND	shift 20
+
+
+	.	error
+
+
+state 66:
+
+	EXP : ID LBRAC_C FIELD . RBRAC_C 
+
+	RBRAC_C	shift 83
+
+
+	.	error
+
+
+state 67:
+
+	FIELD : ID . EQ EXP FIELD2 
+
+	EQ	shift 84
+
+
+	.	error
+
+
+state 68:
+
+	EXP : LET DECS IN . EXPS END 
+
+	CONST_INT	shift 15
+	CONST_STR	shift 14
+	NIL	shift 13
+	MINUS	shift 12
+	LBRAC_R	shift 11
+	WHILE	shift 10
+	IF	shift 9
+	FOR	shift 8
+	LET	shift 7
+	BREAK	shift 6
+	ID	shift 5
+
+	EXP	goto 4
+	EXPS	goto 85
+	LVALUE	goto 2
+	ARITH	goto 1
+
+	.	reduce by rule 1
+
+
+state 69:
+
+	DECS : DEC DECS .  (reduce by rule 23)
+
+
+
+	.	reduce by rule 23
+
+
+state 70:
+
+	DEC : TYPE ID . EQ TY 
+
+	EQ	shift 86
+
+
+	.	error
+
+
+state 71:
+
+	DEC : VAR ID . ASSIGN EXP 
+	DEC : VAR ID . COLON ID ASSIGN EXP 
+
+	COLON	shift 88
+	ASSIGN	shift 87
+
+
+	.	error
+
+
+state 72:
+
+	FUNCDEF : FUNCTION ID . LBRAC_R TYFIELDS RBRAC_R EQ EXP 
+	FUNCDEF : FUNCTION ID . LBRAC_R TYFIELDS RBRAC_R COLON ID EQ EXP 
+
+	LBRAC_R	shift 89
+
+
+	.	error
+
+
+state 73:
+
+	EXP : FOR ID ASSIGN . EXP TO EXP DO EXP 
+
+	CONST_INT	shift 15
+	CONST_STR	shift 14
+	NIL	shift 13
+	MINUS	shift 12
+	LBRAC_R	shift 11
+	WHILE	shift 10
+	IF	shift 9
+	FOR	shift 8
+	LET	shift 7
+	BREAK	shift 6
+	ID	shift 5
+
+	EXP	goto 90
+	LVALUE	goto 2
+	ARITH	goto 1
+
+	.	error
+
+
+state 74:
+
+	EXP : IF EXP THEN . EXP ELSE EXP 
+	EXP : IF EXP THEN . EXP 
+
+	CONST_INT	shift 15
+	CONST_STR	shift 14
+	NIL	shift 13
+	MINUS	shift 12
+	LBRAC_R	shift 11
+	WHILE	shift 10
+	IF	shift 9
+	FOR	shift 8
+	LET	shift 7
+	BREAK	shift 6
+	ID	shift 5
+
+	EXP	goto 91
+	LVALUE	goto 2
+	ARITH	goto 1
+
+	.	error
+
+
+state 75:
+
+	EXP : WHILE EXP DO . EXP 
+
+	CONST_INT	shift 15
+	CONST_STR	shift 14
+	NIL	shift 13
+	MINUS	shift 12
+	LBRAC_R	shift 11
+	WHILE	shift 10
+	IF	shift 9
+	FOR	shift 8
+	LET	shift 7
+	BREAK	shift 6
+	ID	shift 5
+
+	EXP	goto 92
+	LVALUE	goto 2
+	ARITH	goto 1
+
+	.	error
+
+
+state 76:
+
+	EXP : LBRAC_R EXPS RBRAC_R .  (reduce by rule 14)
+
+
+
+	.	reduce by rule 14
+
+
+state 77:
+
+	LVALUE : LVALUE LBRAC_SQ EXP RBRAC_SQ .  (reduce by rule 60)
+
+
+
+	.	reduce by rule 60
+
+
+state 78:
+
+	EXPS2 : SEMICOLON EXP EXPS2 .  (reduce by rule 4)
+
+
+
+	.	reduce by rule 4
+
+
+state 79:
+
+	EXP : ID LBRAC_R PARAM RBRAC_R .  (reduce by rule 11)
+
+
+
+	.	reduce by rule 11
+
+
+state 80:
+
+	PARAM : EXP PARAM2 .  (reduce by rule 54)
+
+
+
+	.	reduce by rule 54
+
+
+state 81:
+
+	PARAM2 : COMMA . EXP PARAM2 
+
+	CONST_INT	shift 15
+	CONST_STR	shift 14
+	NIL	shift 13
+	MINUS	shift 12
+	LBRAC_R	shift 11
+	WHILE	shift 10
+	IF	shift 9
+	FOR	shift 8
+	LET	shift 7
+	BREAK	shift 6
+	ID	shift 5
+
+	EXP	goto 93
+	LVALUE	goto 2
+	ARITH	goto 1
+
+	.	error
+
+
+state 82:
+
+	EXP : ID LBRAC_SQ EXP RBRAC_SQ . OF EXP 
+	LVALUE : ID LBRAC_SQ EXP RBRAC_SQ .  (reduce by rule 59)
+
+	OF	shift 94
+
+
+	.	reduce by rule 59
+
+
+state 83:
+
+	EXP : ID LBRAC_C FIELD RBRAC_C .  (reduce by rule 10)
+
+
+
+	.	reduce by rule 10
+
+
+state 84:
+
+	FIELD : ID EQ . EXP FIELD2 
+
+	CONST_INT	shift 15
+	CONST_STR	shift 14
+	NIL	shift 13
+	MINUS	shift 12
+	LBRAC_R	shift 11
+	WHILE	shift 10
+	IF	shift 9
+	FOR	shift 8
+	LET	shift 7
+	BREAK	shift 6
+	ID	shift 5
+
+	EXP	goto 95
+	LVALUE	goto 2
+	ARITH	goto 1
+
+	.	error
+
+
+state 85:
+
+	EXP : LET DECS IN EXPS . END 
+
+	END	shift 96
+
+
+	.	error
+
+
+state 86:
+
+	DEC : TYPE ID EQ . TY 
+
+	LBRAC_C	shift 100
+	ARRAY	shift 99
+	ID	shift 98
+
+	TY	goto 97
+
+	.	error
+
+
+state 87:
+
+	DEC : VAR ID ASSIGN . EXP 
+
+	CONST_INT	shift 15
+	CONST_STR	shift 14
+	NIL	shift 13
+	MINUS	shift 12
+	LBRAC_R	shift 11
+	WHILE	shift 10
+	IF	shift 9
+	FOR	shift 8
+	LET	shift 7
+	BREAK	shift 6
+	ID	shift 5
+
+	EXP	goto 101
+	LVALUE	goto 2
+	ARITH	goto 1
+
+	.	error
+
+
+state 88:
+
+	DEC : VAR ID COLON . ID ASSIGN EXP 
+
+	ID	shift 102
+
+
+	.	error
+
+
+state 89:
+
+	FUNCDEF : FUNCTION ID LBRAC_R . TYFIELDS RBRAC_R EQ EXP 
+	FUNCDEF : FUNCTION ID LBRAC_R . TYFIELDS RBRAC_R COLON ID EQ EXP 
+
+	ID	shift 104
+
+	TYFIELDS	goto 103
+
+	.	reduce by rule 30
+
+
+state 90:
+
+	EXP : FOR ID ASSIGN EXP . TO EXP DO EXP 
+	ARITH : EXP . PLUS EXP 
+	ARITH : EXP . MINUS EXP 
+	ARITH : EXP . MUL EXP 
+	ARITH : EXP . DIVIDE EXP 
+	ARITH : EXP . EQ EXP 
+	ARITH : EXP . NEQ EXP 
+	ARITH : EXP . GT EXP 
+	ARITH : EXP . LT EXP 
+	ARITH : EXP . LTE EXP 
+	ARITH : EXP . GTE EXP 
+	ARITH : EXP . AND EXP 
+	ARITH : EXP . OR EXP 
+
+	PLUS	shift 32
+	MINUS	shift 31
+	MUL	shift 30
+	DIVIDE	shift 29
+	EQ	shift 27
+	NEQ	shift 26
+	LT	shift 25
+	GT	shift 24
+	GTE	shift 23
+	LTE	shift 22
+	OR	shift 21
+	AND	shift 20
+	TO	shift 105
+
+
+	.	error
+
+
+state 91:
+
+	EXP : IF EXP THEN EXP . ELSE EXP 
+	EXP : IF EXP THEN EXP .  (reduce by rule 17)
+	ARITH : EXP . PLUS EXP 
+	ARITH : EXP . MINUS EXP 
+	ARITH : EXP . MUL EXP 
+	ARITH : EXP . DIVIDE EXP 
+	ARITH : EXP . EQ EXP 
+	ARITH : EXP . NEQ EXP 
+	ARITH : EXP . GT EXP 
+	ARITH : EXP . LT EXP 
+	ARITH : EXP . LTE EXP 
+	ARITH : EXP . GTE EXP 
+	ARITH : EXP . AND EXP 
+	ARITH : EXP . OR EXP 
+
+	ELSE	shift 106
+
+
+	.	reduce by rule 17
+
+
+state 92:
+
+	EXP : WHILE EXP DO EXP .  (reduce by rule 18)
+	ARITH : EXP . PLUS EXP 
+	ARITH : EXP . MINUS EXP 
+	ARITH : EXP . MUL EXP 
+	ARITH : EXP . DIVIDE EXP 
+	ARITH : EXP . EQ EXP 
+	ARITH : EXP . NEQ EXP 
+	ARITH : EXP . GT EXP 
+	ARITH : EXP . LT EXP 
+	ARITH : EXP . LTE EXP 
+	ARITH : EXP . GTE EXP 
+	ARITH : EXP . AND EXP 
+	ARITH : EXP . OR EXP 
+
+	PLUS	shift 32
+	MINUS	shift 31
+	MUL	shift 30
+	DIVIDE	shift 29
+	EQ	shift 27
+	NEQ	shift 26
+	LT	shift 25
+	GT	shift 24
+	GTE	shift 23
+	LTE	shift 22
+	OR	shift 21
+	AND	shift 20
+
+
+	.	reduce by rule 18
+
+
+state 93:
+
+	PARAM2 : COMMA EXP . PARAM2 
+	ARITH : EXP . PLUS EXP 
+	ARITH : EXP . MINUS EXP 
+	ARITH : EXP . MUL EXP 
+	ARITH : EXP . DIVIDE EXP 
+	ARITH : EXP . EQ EXP 
+	ARITH : EXP . NEQ EXP 
+	ARITH : EXP . GT EXP 
+	ARITH : EXP . LT EXP 
+	ARITH : EXP . LTE EXP 
+	ARITH : EXP . GTE EXP 
+	ARITH : EXP . AND EXP 
+	ARITH : EXP . OR EXP 
+
+	PLUS	shift 32
+	MINUS	shift 31
+	MUL	shift 30
+	DIVIDE	shift 29
+	COMMA	shift 81
+	EQ	shift 27
+	NEQ	shift 26
+	LT	shift 25
+	GT	shift 24
+	GTE	shift 23
+	LTE	shift 22
+	OR	shift 21
+	AND	shift 20
+
+	PARAM2	goto 107
+
+	.	reduce by rule 55
+
+
+state 94:
+
+	EXP : ID LBRAC_SQ EXP RBRAC_SQ OF . EXP 
+
+	CONST_INT	shift 15
+	CONST_STR	shift 14
+	NIL	shift 13
+	MINUS	shift 12
+	LBRAC_R	shift 11
+	WHILE	shift 10
+	IF	shift 9
+	FOR	shift 8
+	LET	shift 7
+	BREAK	shift 6
+	ID	shift 5
+
+	EXP	goto 108
+	LVALUE	goto 2
+	ARITH	goto 1
+
+	.	error
+
+
+state 95:
+
+	FIELD : ID EQ EXP . FIELD2 
+	ARITH : EXP . PLUS EXP 
+	ARITH : EXP . MINUS EXP 
+	ARITH : EXP . MUL EXP 
+	ARITH : EXP . DIVIDE EXP 
+	ARITH : EXP . EQ EXP 
+	ARITH : EXP . NEQ EXP 
+	ARITH : EXP . GT EXP 
+	ARITH : EXP . LT EXP 
+	ARITH : EXP . LTE EXP 
+	ARITH : EXP . GTE EXP 
+	ARITH : EXP . AND EXP 
+	ARITH : EXP . OR EXP 
+
+	PLUS	shift 32
+	MINUS	shift 31
+	MUL	shift 30
+	DIVIDE	shift 29
+	COMMA	shift 110
+	EQ	shift 27
+	NEQ	shift 26
+	LT	shift 25
+	GT	shift 24
+	GTE	shift 23
+	LTE	shift 22
+	OR	shift 21
+	AND	shift 20
+
+	FIELD2	goto 109
+
+	.	reduce by rule 51
+
+
+state 96:
+
+	EXP : LET DECS IN EXPS END .  (reduce by rule 21)
+
+
+
+	.	reduce by rule 21
+
+
+state 97:
+
+	DEC : TYPE ID EQ TY .  (reduce by rule 24)
+
+
+
+	.	reduce by rule 24
+
+
+state 98:
+
+	TY : ID .  (reduce by rule 34)
+
+
+
+	.	reduce by rule 34
+
+
+state 99:
+
+	TY : ARRAY . OF ID 
+
+	OF	shift 111
+
+
+	.	error
+
+
+state 100:
+
+	TY : LBRAC_C . TYFIELDS RBRAC_C 
+
+	ID	shift 104
+
+	TYFIELDS	goto 112
+
+	.	reduce by rule 30
+
+
+state 101:
+
+	DEC : VAR ID ASSIGN EXP .  (reduce by rule 25)
+	ARITH : EXP . PLUS EXP 
+	ARITH : EXP . MINUS EXP 
+	ARITH : EXP . MUL EXP 
+	ARITH : EXP . DIVIDE EXP 
+	ARITH : EXP . EQ EXP 
+	ARITH : EXP . NEQ EXP 
+	ARITH : EXP . GT EXP 
+	ARITH : EXP . LT EXP 
+	ARITH : EXP . LTE EXP 
+	ARITH : EXP . GTE EXP 
+	ARITH : EXP . AND EXP 
+	ARITH : EXP . OR EXP 
+
+	PLUS	shift 32
+	MINUS	shift 31
+	MUL	shift 30
+	DIVIDE	shift 29
+	EQ	shift 27
+	NEQ	shift 26
+	LT	shift 25
+	GT	shift 24
+	GTE	shift 23
+	LTE	shift 22
+	OR	shift 21
+	AND	shift 20
+
+
+	.	reduce by rule 25
+
+
+state 102:
+
+	DEC : VAR ID COLON ID . ASSIGN EXP 
+
+	ASSIGN	shift 113
+
+
+	.	error
+
+
+state 103:
+
+	FUNCDEF : FUNCTION ID LBRAC_R TYFIELDS . RBRAC_R EQ EXP 
+	FUNCDEF : FUNCTION ID LBRAC_R TYFIELDS . RBRAC_R COLON ID EQ EXP 
+
+	RBRAC_R	shift 114
+
+
+	.	error
+
+
+state 104:
+
+	TYFIELDS : ID . COLON ID TYFIELDS2 
+
+	COLON	shift 115
+
+
+	.	error
+
+
+state 105:
+
+	EXP : FOR ID ASSIGN EXP TO . EXP DO EXP 
+
+	CONST_INT	shift 15
+	CONST_STR	shift 14
+	NIL	shift 13
+	MINUS	shift 12
+	LBRAC_R	shift 11
+	WHILE	shift 10
+	IF	shift 9
+	FOR	shift 8
+	LET	shift 7
+	BREAK	shift 6
+	ID	shift 5
+
+	EXP	goto 116
+	LVALUE	goto 2
+	ARITH	goto 1
+
+	.	error
+
+
+state 106:
+
+	EXP : IF EXP THEN EXP ELSE . EXP 
+
+	CONST_INT	shift 15
+	CONST_STR	shift 14
+	NIL	shift 13
+	MINUS	shift 12
+	LBRAC_R	shift 11
+	WHILE	shift 10
+	IF	shift 9
+	FOR	shift 8
+	LET	shift 7
+	BREAK	shift 6
+	ID	shift 5
+
+	EXP	goto 117
+	LVALUE	goto 2
+	ARITH	goto 1
+
+	.	error
+
+
+state 107:
+
+	PARAM2 : COMMA EXP PARAM2 .  (reduce by rule 56)
+
+
+
+	.	reduce by rule 56
+
+
+state 108:
+
+	EXP : ID LBRAC_SQ EXP RBRAC_SQ OF EXP .  (reduce by rule 8)
+	ARITH : EXP . PLUS EXP 
+	ARITH : EXP . MINUS EXP 
+	ARITH : EXP . MUL EXP 
+	ARITH : EXP . DIVIDE EXP 
+	ARITH : EXP . EQ EXP 
+	ARITH : EXP . NEQ EXP 
+	ARITH : EXP . GT EXP 
+	ARITH : EXP . LT EXP 
+	ARITH : EXP . LTE EXP 
+	ARITH : EXP . GTE EXP 
+	ARITH : EXP . AND EXP 
+	ARITH : EXP . OR EXP 
+
+	PLUS	shift 32
+	MINUS	shift 31
+	MUL	shift 30
+	DIVIDE	shift 29
+	EQ	shift 27
+	NEQ	shift 26
+	LT	shift 25
+	GT	shift 24
+	GTE	shift 23
+	LTE	shift 22
+	OR	shift 21
+	AND	shift 20
+
+
+	.	reduce by rule 8
+
+
+state 109:
+
+	FIELD : ID EQ EXP FIELD2 .  (reduce by rule 50)
+
+
+
+	.	reduce by rule 50
+
+
+state 110:
+
+	FIELD2 : COMMA . ID EQ EXP FIELD2 
+
+	ID	shift 118
+
+
+	.	error
+
+
+state 111:
+
+	TY : ARRAY OF . ID 
+
+	ID	shift 119
+
+
+	.	error
+
+
+state 112:
+
+	TY : LBRAC_C TYFIELDS . RBRAC_C 
+
+	RBRAC_C	shift 120
+
+
+	.	error
+
+
+state 113:
+
+	DEC : VAR ID COLON ID ASSIGN . EXP 
+
+	CONST_INT	shift 15
+	CONST_STR	shift 14
+	NIL	shift 13
+	MINUS	shift 12
+	LBRAC_R	shift 11
+	WHILE	shift 10
+	IF	shift 9
+	FOR	shift 8
+	LET	shift 7
+	BREAK	shift 6
+	ID	shift 5
+
+	EXP	goto 121
+	LVALUE	goto 2
+	ARITH	goto 1
+
+	.	error
+
+
+state 114:
+
+	FUNCDEF : FUNCTION ID LBRAC_R TYFIELDS RBRAC_R . EQ EXP 
+	FUNCDEF : FUNCTION ID LBRAC_R TYFIELDS RBRAC_R . COLON ID EQ EXP 
+
+	COLON	shift 123
+	EQ	shift 122
+
+
+	.	error
+
+
+state 115:
+
+	TYFIELDS : ID COLON . ID TYFIELDS2 
+
+	ID	shift 124
+
+
+	.	error
+
+
+state 116:
+
+	EXP : FOR ID ASSIGN EXP TO EXP . DO EXP 
+	ARITH : EXP . PLUS EXP 
+	ARITH : EXP . MINUS EXP 
+	ARITH : EXP . MUL EXP 
+	ARITH : EXP . DIVIDE EXP 
+	ARITH : EXP . EQ EXP 
+	ARITH : EXP . NEQ EXP 
+	ARITH : EXP . GT EXP 
+	ARITH : EXP . LT EXP 
+	ARITH : EXP . LTE EXP 
+	ARITH : EXP . GTE EXP 
+	ARITH : EXP . AND EXP 
+	ARITH : EXP . OR EXP 
+
+	PLUS	shift 32
+	MINUS	shift 31
+	MUL	shift 30
+	DIVIDE	shift 29
+	EQ	shift 27
+	NEQ	shift 26
+	LT	shift 25
+	GT	shift 24
+	GTE	shift 23
+	LTE	shift 22
+	OR	shift 21
+	AND	shift 20
+	DO	shift 125
+
+
+	.	error
+
+
+state 117:
+
+	EXP : IF EXP THEN EXP ELSE EXP .  (reduce by rule 16)
+	ARITH : EXP . PLUS EXP 
+	ARITH : EXP . MINUS EXP 
+	ARITH : EXP . MUL EXP 
+	ARITH : EXP . DIVIDE EXP 
+	ARITH : EXP . EQ EXP 
+	ARITH : EXP . NEQ EXP 
+	ARITH : EXP . GT EXP 
+	ARITH : EXP . LT EXP 
+	ARITH : EXP . LTE EXP 
+	ARITH : EXP . GTE EXP 
+	ARITH : EXP . AND EXP 
+	ARITH : EXP . OR EXP 
+
+
+
+	.	reduce by rule 16
+
+
+state 118:
+
+	FIELD2 : COMMA ID . EQ EXP FIELD2 
+
+	EQ	shift 126
+
+
+	.	error
+
+
+state 119:
+
+	TY : ARRAY OF ID .  (reduce by rule 36)
+
+
+
+	.	reduce by rule 36
+
+
+state 120:
+
+	TY : LBRAC_C TYFIELDS RBRAC_C .  (reduce by rule 35)
+
+
+
+	.	reduce by rule 35
+
+
+state 121:
+
+	DEC : VAR ID COLON ID ASSIGN EXP .  (reduce by rule 26)
+	ARITH : EXP . PLUS EXP 
+	ARITH : EXP . MINUS EXP 
+	ARITH : EXP . MUL EXP 
+	ARITH : EXP . DIVIDE EXP 
+	ARITH : EXP . EQ EXP 
+	ARITH : EXP . NEQ EXP 
+	ARITH : EXP . GT EXP 
+	ARITH : EXP . LT EXP 
+	ARITH : EXP . LTE EXP 
+	ARITH : EXP . GTE EXP 
+	ARITH : EXP . AND EXP 
+	ARITH : EXP . OR EXP 
+
+	PLUS	shift 32
+	MINUS	shift 31
+	MUL	shift 30
+	DIVIDE	shift 29
+	EQ	shift 27
+	NEQ	shift 26
+	LT	shift 25
+	GT	shift 24
+	GTE	shift 23
+	LTE	shift 22
+	OR	shift 21
+	AND	shift 20
+
+
+	.	reduce by rule 26
+
+
+state 122:
+
+	FUNCDEF : FUNCTION ID LBRAC_R TYFIELDS RBRAC_R EQ . EXP 
+
+	CONST_INT	shift 15
+	CONST_STR	shift 14
+	NIL	shift 13
+	MINUS	shift 12
+	LBRAC_R	shift 11
+	WHILE	shift 10
+	IF	shift 9
+	FOR	shift 8
+	LET	shift 7
+	BREAK	shift 6
+	ID	shift 5
+
+	EXP	goto 127
+	LVALUE	goto 2
+	ARITH	goto 1
+
+	.	error
+
+
+state 123:
+
+	FUNCDEF : FUNCTION ID LBRAC_R TYFIELDS RBRAC_R COLON . ID EQ EXP 
+
+	ID	shift 128
+
+
+	.	error
+
+
+state 124:
+
+	TYFIELDS : ID COLON ID . TYFIELDS2 
+
+	COMMA	shift 130
+
+	TYFIELDS2	goto 129
+
+	.	reduce by rule 32
+
+
+state 125:
+
+	EXP : FOR ID ASSIGN EXP TO EXP DO . EXP 
+
+	CONST_INT	shift 15
+	CONST_STR	shift 14
+	NIL	shift 13
+	MINUS	shift 12
+	LBRAC_R	shift 11
+	WHILE	shift 10
+	IF	shift 9
+	FOR	shift 8
+	LET	shift 7
+	BREAK	shift 6
+	ID	shift 5
+
+	EXP	goto 131
+	LVALUE	goto 2
+	ARITH	goto 1
+
+	.	error
+
+
+state 126:
+
+	FIELD2 : COMMA ID EQ . EXP FIELD2 
+
+	CONST_INT	shift 15
+	CONST_STR	shift 14
+	NIL	shift 13
+	MINUS	shift 12
+	LBRAC_R	shift 11
+	WHILE	shift 10
+	IF	shift 9
+	FOR	shift 8
+	LET	shift 7
+	BREAK	shift 6
+	ID	shift 5
+
+	EXP	goto 132
+	LVALUE	goto 2
+	ARITH	goto 1
+
+	.	error
+
+
+state 127:
+
+	FUNCDEF : FUNCTION ID LBRAC_R TYFIELDS RBRAC_R EQ EXP .  (reduce by rule 28)
+	ARITH : EXP . PLUS EXP 
+	ARITH : EXP . MINUS EXP 
+	ARITH : EXP . MUL EXP 
+	ARITH : EXP . DIVIDE EXP 
+	ARITH : EXP . EQ EXP 
+	ARITH : EXP . NEQ EXP 
+	ARITH : EXP . GT EXP 
+	ARITH : EXP . LT EXP 
+	ARITH : EXP . LTE EXP 
+	ARITH : EXP . GTE EXP 
+	ARITH : EXP . AND EXP 
+	ARITH : EXP . OR EXP 
+
+	PLUS	shift 32
+	MINUS	shift 31
+	MUL	shift 30
+	DIVIDE	shift 29
+	EQ	shift 27
+	NEQ	shift 26
+	LT	shift 25
+	GT	shift 24
+	GTE	shift 23
+	LTE	shift 22
+	OR	shift 21
+	AND	shift 20
+
+
+	.	reduce by rule 28
+
+
+state 128:
+
+	FUNCDEF : FUNCTION ID LBRAC_R TYFIELDS RBRAC_R COLON ID . EQ EXP 
+
+	EQ	shift 133
+
+
+	.	error
+
+
+state 129:
+
+	TYFIELDS : ID COLON ID TYFIELDS2 .  (reduce by rule 31)
+
+
+
+	.	reduce by rule 31
+
+
+state 130:
+
+	TYFIELDS2 : COMMA . ID COLON ID TYFIELDS2 
+
+	ID	shift 134
+
+
+	.	error
+
+
+state 131:
+
+	EXP : FOR ID ASSIGN EXP TO EXP DO EXP .  (reduce by rule 19)
+	ARITH : EXP . PLUS EXP 
+	ARITH : EXP . MINUS EXP 
+	ARITH : EXP . MUL EXP 
+	ARITH : EXP . DIVIDE EXP 
+	ARITH : EXP . EQ EXP 
+	ARITH : EXP . NEQ EXP 
+	ARITH : EXP . GT EXP 
+	ARITH : EXP . LT EXP 
+	ARITH : EXP . LTE EXP 
+	ARITH : EXP . GTE EXP 
+	ARITH : EXP . AND EXP 
+	ARITH : EXP . OR EXP 
+
+	PLUS	shift 32
+	MINUS	shift 31
+	MUL	shift 30
+	DIVIDE	shift 29
+	EQ	shift 27
+	NEQ	shift 26
+	LT	shift 25
+	GT	shift 24
+	GTE	shift 23
+	LTE	shift 22
+	OR	shift 21
+	AND	shift 20
+
+
+	.	reduce by rule 19
+
+
+state 132:
+
+	ARITH : EXP . PLUS EXP 
+	ARITH : EXP . MINUS EXP 
+	ARITH : EXP . MUL EXP 
+	ARITH : EXP . DIVIDE EXP 
+	ARITH : EXP . EQ EXP 
+	ARITH : EXP . NEQ EXP 
+	ARITH : EXP . GT EXP 
+	ARITH : EXP . LT EXP 
+	ARITH : EXP . LTE EXP 
+	ARITH : EXP . GTE EXP 
+	ARITH : EXP . AND EXP 
+	ARITH : EXP . OR EXP 
+	FIELD2 : COMMA ID EQ EXP . FIELD2 
+
+	PLUS	shift 32
+	MINUS	shift 31
+	MUL	shift 30
+	DIVIDE	shift 29
+	COMMA	shift 110
+	EQ	shift 27
+	NEQ	shift 26
+	LT	shift 25
+	GT	shift 24
+	GTE	shift 23
+	LTE	shift 22
+	OR	shift 21
+	AND	shift 20
+
+	FIELD2	goto 135
+
+	.	reduce by rule 51
+
+
+state 133:
+
+	FUNCDEF : FUNCTION ID LBRAC_R TYFIELDS RBRAC_R COLON ID EQ . EXP 
+
+	CONST_INT	shift 15
+	CONST_STR	shift 14
+	NIL	shift 13
+	MINUS	shift 12
+	LBRAC_R	shift 11
+	WHILE	shift 10
+	IF	shift 9
+	FOR	shift 8
+	LET	shift 7
+	BREAK	shift 6
+	ID	shift 5
+
+	EXP	goto 136
+	LVALUE	goto 2
+	ARITH	goto 1
+
+	.	error
+
+
+state 134:
+
+	TYFIELDS2 : COMMA ID . COLON ID TYFIELDS2 
+
+	COLON	shift 137
+
+
+	.	error
+
+
+state 135:
+
+	FIELD2 : COMMA ID EQ EXP FIELD2 .  (reduce by rule 52)
+
+
+
+	.	reduce by rule 52
+
+
+state 136:
+
+	FUNCDEF : FUNCTION ID LBRAC_R TYFIELDS RBRAC_R COLON ID EQ EXP .  (reduce by rule 29)
+	ARITH : EXP . PLUS EXP 
+	ARITH : EXP . MINUS EXP 
+	ARITH : EXP . MUL EXP 
+	ARITH : EXP . DIVIDE EXP 
+	ARITH : EXP . EQ EXP 
+	ARITH : EXP . NEQ EXP 
+	ARITH : EXP . GT EXP 
+	ARITH : EXP . LT EXP 
+	ARITH : EXP . LTE EXP 
+	ARITH : EXP . GTE EXP 
+	ARITH : EXP . AND EXP 
+	ARITH : EXP . OR EXP 
+
+	PLUS	shift 32
+	MINUS	shift 31
+	MUL	shift 30
+	DIVIDE	shift 29
+	EQ	shift 27
+	NEQ	shift 26
+	LT	shift 25
+	GT	shift 24
+	GTE	shift 23
+	LTE	shift 22
+	OR	shift 21
+	AND	shift 20
+
+
+	.	reduce by rule 29
+
+
+state 137:
+
+	TYFIELDS2 : COMMA ID COLON . ID TYFIELDS2 
+
+	ID	shift 138
+
+
+	.	error
+
+
+state 138:
+
+	TYFIELDS2 : COMMA ID COLON ID . TYFIELDS2 
+
+	COMMA	shift 130
+
+	TYFIELDS2	goto 139
+
+	.	reduce by rule 32
+
+
+state 139:
+
+	TYFIELDS2 : COMMA ID COLON ID TYFIELDS2 .  (reduce by rule 33)
+
+
+
+	.	reduce by rule 33
+
+
+state 140:
+
+
+	EOF	accept
+
+
+	.	error
+
+447 of 1006 action table entries left after compaction
+134 goto table entries
