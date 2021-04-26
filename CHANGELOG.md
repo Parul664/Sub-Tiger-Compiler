@@ -27,3 +27,4 @@
 
 2021-04-21
 - Extended support for CommandLine arguments before the filename. Support for commandLine Args following filename was already present before.
+- Added Canonisation, only Linearise and Basic Blocks
