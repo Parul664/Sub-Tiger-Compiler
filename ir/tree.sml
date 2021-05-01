@@ -7,13 +7,14 @@ struct
     val nextLabel : label ref= ref 0
     val nextTemp :  temp ref = ref 0
 
-    fun newlabel _ = (!nextLabel = !nextLabel + 1; !nextLabel)
-    fun newtemp _  = (!nextTemp = !nextTemp+ 1; !nextTemp )
+    fun newlabel () = (nextLabel := !nextLabel + 1; !nextLabel-1)
+    fun newtemp ()  = (nextTemp := !nextTemp+ 1; !nextTemp-1 )
  
 end
 
-structure Tree:TREE =
+structure Tree =
 struct  
+    structure Temp = Temp
     datatype exp = CONST of int
                     (* label in the machine language *)
                  | NAME of Temp.label

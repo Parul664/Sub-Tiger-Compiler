@@ -11,18 +11,18 @@ end
     structure A = Tiger
 
     (* for pretty printing of operators *)
-    fun binop A.Plus           = "+"
-      | binop A.Minus          = "-"
-      | binop A.Mul            = "*"
-      | binop A.Div            = "/"
-      | binop A.Equals         = "="
-      | binop A.AngBrac        = "<>"
-      | binop A.GreatThan      = ">"
-      | binop A.LessThan       = "<"
-      | binop A.GreatEqualThan = ">="
-      | binop A.LessEqualThan  = "<="
-      | binop A.And            = "&"
-      | binop A.Or             = "|" 
+    fun binop A.Plus           = "+ "
+      | binop A.Minus          = "- "
+      | binop A.Mul            = "* "
+      | binop A.Div            = "/ "
+      | binop A.Equals         = "= "
+      | binop A.AngBrac        = "<> "
+      | binop A.GreatThan      = "> "
+      | binop A.LessThan       = "< "
+      | binop A.GreatEqualThan = ">= "
+      | binop A.LessEqualThan  = "<= "
+      | binop A.And            = "& "
+      | binop A.Or             = "| " 
 
     (* Color Scheme  
     Nil = Blue \027[34m
@@ -224,10 +224,13 @@ end
     (* This is the main function, that takes a list of expressions and then
     indents each expression *)
     fun compile []         = "\n"
+      | compile [e1]       = (case (ifteller e1) of 
+                              0 => "\n" 
+                            | _ => "") ^(indent e1 0) ^ "\n"
       | compile (e1 :: e2) = (indent e1 0) ^ 
                              (case (ifteller e1) of
-                                0 => "\n" 
-                              | _ => ""
+                                0 => ";\n" 
+                              | _ => ";"
                              ) ^ (compile e2) 
 
 end

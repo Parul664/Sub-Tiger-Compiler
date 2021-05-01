@@ -6,9 +6,8 @@ sig
     val newtemp : unit -> temp
 end
 
-signature TREE =
+(* signature TREE =
 sig
-  
     datatype exp = CONST of int
                     (* label in the machine language *)
                  | NAME of Temp.label
@@ -36,4 +35,4 @@ sig
     and relop = EQ | NE | LT | GT | LE | GE 
               | ULT | ULE | EGT | UGE
 
-end
+end *)

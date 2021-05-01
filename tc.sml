@@ -19,9 +19,11 @@ structure TIGER = struct
                   |  [x] => makeFileLexer x
                   |  [x,y]  => (case x of "--pp" => (teller := 1;makeFileLexer y )
                                         | "--ast" => (teller :=2;makeFileLexer y)
+                                        | "--t"  => (teller :=3 ; makeFileLexer y)
                                         | _     => (case y of "--pp" => (teller := 1;makeFileLexer x)
                                                             | "--ast" => (teller := 2;makeFileLexer x)
-                                                            | _     => (TextIO.output(TextIO.stdErr, "options \n --ast => show AST \n --pp => pretty print\n"); OS.Process.exit OS.Process.failure)
+                                                            | "--t"  => (teller :=3 ; makeFileLexer x)
+                                                            | _     => (TextIO.output(TextIO.stdErr, "options \n --ast => show AST \n --pp => pretty print\n --t Tree IR\n"); OS.Process.exit OS.Process.failure)
                                                     )
                                 )
                   |  _      => (TextIO.output(TextIO.stdErr, "usage: tc [options] file [options]\n"); OS.Process.exit OS.Process.failure)
@@ -36,11 +38,12 @@ structure TIGER = struct
                   []  => PrintAbsyn.print(TextIO.stdOut,program)
                 | [x] => PrintAbsyn.print(TextIO.stdOut,program)
                 | [x,y] =>  ( case !teller of 
-                                2 => PrintAbsyn.print(TextIO.stdOut,program)
+                                3 => (TextIO.output(TextIO.stdOut,(PT.printT (Translate.translist(program)))))
+                              | 2 => PrintAbsyn.print(TextIO.stdOut,program)
                               | 1 => TextIO.output(TextIO.stdOut,(PP.compile(program)))
-                              | _     => (TextIO.output(TextIO.stdErr, "options \n --ast => show AST \n --pp => pretty print\n"); OS.Process.exit OS.Process.failure)
+                              | _     => (TextIO.output(TextIO.stdErr, "options \n --ast => show AST \n --pp => pretty print\n --t Tree IR"); OS.Process.exit OS.Process.failure)
                             )
-                | _    => (TextIO.output(TextIO.stdErr, "usage: ec file option \n option --ast => show AST\n --pp => pretty print\n"); OS.Process.exit OS.Process.failure)
+                | _    => (TextIO.output(TextIO.stdErr, "usage: ec file option \n option --ast => show AST\n --pp => pretty print\n --t Tree IR"); OS.Process.exit OS.Process.failure)
 
     (* val _ = PrintAbsyn.print(TextIO.stdOut,program) *)
 

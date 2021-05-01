@@ -80,6 +80,9 @@
 
 (* Associativity of keywords and Operators *)
 %nonassoc ASSIGN DO OF
+%right IF
+%right THEN 
+%right ELSE
 %left OR AND
 %nonassoc EQ NEQ LT LTE GT GTE
 %left PLUS MINUS
@@ -88,9 +91,9 @@
 %nonassoc ID
 (* %nonassoc NEWLINE *)
 %left  LBRAC_SQ RBRAC_SQ LBRAC_C RBRAC_C
-%right IF
+(* %right IF
 %right THEN 
-%right ELSE
+%right ELSE *)
 %right EXP_MINUS
 (* %nonassoc OF *)
 (* %left DOT *)
