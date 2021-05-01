@@ -1,3 +1,31 @@
+
+signature ENV =
+sig
+  type mp
+  val lookup : string * mp -> Temp.temp option
+  val update : string * Temp.temp * mp -> mp
+  val empty : unit -> mp
+end
+
+
+structure env :ENV = 
+struct
+    structure CUS_MAP = RedBlackMapFn (struct 
+		      								  type ord_key = string 
+											      val	compare = String.compare 
+										      end)    
+    type ret = Temp.temp
+    type mp = ret CUS_MAP.map
+    val MP : mp = CUS_MAP.empty
+
+    fun empty () = CUS_MAP.empty 
+
+    fun lookup (s, m) = (CUS_MAP.find (m, s))                              
+    
+    fun update (s, i, m) = CUS_MAP.insert(m, s, i )
+end
+
+
 structure Translate :sig 
     val translist : Tiger.exp list -> Tree.exp list
 end = 
