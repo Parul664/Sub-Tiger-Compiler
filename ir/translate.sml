@@ -10,10 +10,10 @@ end
 
 structure env :ENV = 
 struct
-    structure CUS_MAP = RedBlackMapFn (struct 
-		      								  type ord_key = string 
-											      val	compare = String.compare 
-										      end)    
+    structure CUS_MAP = RedBlackMapFn (struct
+                            type ord_key = string
+                            val	compare = String.compare
+                        end)    
     type ret = Temp.temp
     type mp = ret CUS_MAP.map
     val MP : mp = CUS_MAP.empty
