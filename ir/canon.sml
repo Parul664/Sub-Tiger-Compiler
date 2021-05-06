@@ -3,6 +3,7 @@ structure Canon =
 struct 
 
     structure T = Tree
+    exception WrongParam of string
 
     fun linearize(stm0 : T.stm) : T.stm list =
     let 
@@ -48,40 +49,36 @@ struct
         and reorder_stm (el, fxn) = let val temp = (reorder el) 
                                         val s = fxn (#2(temp))
                                     in 
-                                    (case (#1(temp)) of 
-                                      (* If we get a statement of this form, then that means that reorder has has got an empty list
-                                       and if even not so, this statement does nothing as statement. So would just return it.
-                                       *)
-                                      (T.EXP (T.CONST _)) => s
-                                      | e => T.SEQ(e,s)
-                                    )  
-                                    end
+                                    T.SEQ((#1(temp)),s) end
 
 
 
         (* This is the sub-expression extractors for the Tree.Exp structure. *)
 
-        and do_exp (T.CONST a)           = reorder_exp([], fn [] => T.CONST a)
-          | do_exp (T.NAME l )           = reorder_exp([], fn [] => T.NAME l)
-          | do_exp (T.TEMP t)            = reorder_exp([], fn [] => T.TEMP t)
-          | do_exp (T.BINOP (OP, e1,e2)) = reorder_exp([e1,e2], fn [e1, e2] => T.BINOP (OP, e1,e2))
-          | do_exp (T.MEM e)             = reorder_exp([e], fn [e] => (T.MEM e))
-          | do_exp (T.CALL (e ,el))      = reorder_exp(e::el, fn e::el => T.CALL (e ,el))
-          | do_exp (T.ESEQ (s, e))       = reorder_exp([e], fn [e] => T.ESEQ (do_stm s,e))
+        and do_exp (T.CONST a)           = reorder_exp([], fn [] => T.CONST a | _ => raise WrongParam "Wrong")
+          | do_exp (T.NAME l )           = reorder_exp([], fn [] => T.NAME l | _ => raise WrongParam "Wrong")
+          | do_exp (T.TEMP t)            = reorder_exp([], fn [] => T.TEMP t | _ => raise WrongParam "Wrong")
+          | do_exp (T.BINOP (OP, e1,e2)) = reorder_exp([e1,e2], fn [e1, e2] => T.BINOP (OP, e1,e2) | _ => raise WrongParam "Wrong")
+          | do_exp (T.MEM e)             = reorder_exp([e], fn [e] => (T.MEM e) | _ => raise WrongParam "Wrong")
+          | do_exp (T.CALL (e ,el))      = reorder_exp(e::el, fn e::el => T.CALL (e ,el) | _ => raise WrongParam "Wrong")
+          | do_exp (T.ESEQ (s, e))       = let val ds = do_stm s
+                                               val (es, ls) = do_exp e in
+                                            (T.SEQ(ds, es), ls)
+                                            end
 
 
         (* Extracting all the expressions out of it, so that we can reorder them and then put is back into place *)
         (* So this function is actinf like a sub-expression extractor *)
-        and do_stm (T.MOVE ((T.NAME l), e))             = reorder_stm([e], fn [e] =>  (T.MOVE (T.NAME l, e)))
-          | do_stm (T.MOVE ((T.TEMP t),(T.CALL(e,el)))) = reorder_stm((e::el), fn (e::el) => (T.MOVE (T.TEMP t,T.CALL(e,el))) )
-          | do_stm (T.MOVE ((T.TEMP t), e))             = reorder_stm([e], fn [e] =>  (T.MOVE (T.TEMP t, e)))
-          | do_stm (T.MOVE (e1,e2))                     = reorder_stm([e1,e2], fn [e1,e2] => T.MOVE(e1,e2))
+        and do_stm (T.MOVE ((T.NAME l), e))             = reorder_stm([e], fn [e] =>  (T.MOVE (T.NAME l, e)) | _ => raise WrongParam "Wrong")
+          | do_stm (T.MOVE ((T.TEMP t),(T.CALL(e,el)))) = reorder_stm((e::el), fn (e::el) => (T.MOVE (T.TEMP t,T.CALL(e,el))) | _ => raise WrongParam "Wrong")
+          | do_stm (T.MOVE ((T.TEMP t), e))             = reorder_stm([e], fn [e] =>  (T.MOVE (T.TEMP t, e))| _ => raise WrongParam "Wrong")
+          | do_stm (T.MOVE (e1,e2))                     = reorder_stm([e1,e2], fn [e1,e2] => T.MOVE(e1,e2) | _ => raise WrongParam "Wrong")
           (* Since, call is inside EXP, we don't need its value and so there is no need to move it into a register *)
           (* By doing this we hiding CALL statements from the Reorder function *)
-          | do_stm (T.EXP (T.CALL (e,el)))              = reorder_stm ((e::el), fn (e::el) => (T.EXP (T.CALL (e,el))))
-          | do_stm (T.EXP (e1))                         = reorder_stm ([e1], fn [e1] => T.EXP(e1) )
-          | do_stm (T.JUMP (e1, ll))                    = reorder_stm( [e1] , fn [e1] =>(T.JUMP (e1, ll)) )
-          | do_stm (T.CJUMP (OP, e1, e2, l1, l2))       = reorder_stm([e1,e2], fn [e1,e2] => (T.CJUMP(OP, e1, e2, l1, l2)))
+          | do_stm (T.EXP (T.CALL (e,el)))              = reorder_stm ((e::el), fn (e::el) => (T.EXP (T.CALL (e,el))) | _ => raise WrongParam "Wrong")
+          | do_stm (T.EXP (e1))                         = reorder_stm ([e1], fn [e1] => T.EXP(e1) | _ => raise WrongParam "Wrong")
+          | do_stm (T.JUMP (e1, ll))                    = reorder_stm( [e1] , fn [e1] =>(T.JUMP (e1, ll)) | _ => raise WrongParam "Wrong")
+          | do_stm (T.CJUMP (OP, e1, e2, l1, l2))       = reorder_stm([e1,e2], fn [e1,e2] => (T.CJUMP(OP, e1, e2, l1, l2)) | _ => raise WrongParam "Wrong")
           | do_stm (T.SEQ (s1, s2))                     = (T.SEQ (do_stm s1, do_stm s2))
           | do_stm (T.LABEL l)                          = (T.LABEL l)
     
@@ -89,11 +86,11 @@ struct
         (* At the end all a seq of SEQ instructions is formed, which can be very well represented as a list.
           So, this function make a list by removing the SEQ constructs
          *)
-        fun linear (T.SEQ (a,b),l) = linear (a, (linear b l))
+        fun linear (T.SEQ (a,b),l) = linear (a, (linear (b, l)))
           | linear (s,l)           = s::l 
     
     in
-        linearize(do_stm stm0 , [])
+        linear(do_stm stm0 , [])
     end
 
   (* Reverse the direction of the list, The blocks inside the list of basic blocks is reversed. 

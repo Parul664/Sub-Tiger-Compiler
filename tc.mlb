@@ -12,5 +12,6 @@ ir/tree.sig            (* Signature for the Tree IR                    *)
 ir/tree.sml            (* Tree IR representation                       *)
 ir/translate.sml       (* Translation into Tree IR                     *)
 target/printTree.sml   (* The printer for the Tree IR                  *)
+ir/canon.sml           (* The structure for Canonisation of the Tree   *)
 
 tc.sml

@@ -1,7 +1,3 @@
-ERROR IN GRADING:
-Sir, I got Value 3, even when both my labs are working perfectly, and the commit hashes are also correct. Kindly consider rechecking, and please inform me if there is some issue.
-
-
 2021-02-17
 - Made a compiler that prints "hello world"
 
@@ -32,3 +28,12 @@ Sir, I got Value 3, even when both my labs are working perfectly, and the commit
 2021-04-21
 - Extended support for CommandLine arguments before the filename. Support for commandLine Args following filename was already present before.
 - Added Canonisation, only Linearise and Basic Blocks
+
+2021-04-28
+- Added Translation to TreeIR for BinOpExpr and IExpr
+- Added environment for Variables
+
+2021-05-05
+- Added Translation to TreeIR for LValueExpr, SeqExpr, AssignExr, IfExpr, WhileExpr, ForExpr, BreakExpr and LetExpr.
+- Connected Canonisation with TreeIR to represent Canonised TreeIR (only the Linearize function)
+- Added file for printing the TreeIR, using --t option and its Canonised Version using --c option.
