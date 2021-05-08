@@ -32,7 +32,7 @@ struct
                                           | commute _                    = false
                                     in
                                     (case commute (s2,er1) of 
-                                          true  => (T.SEQ (s1,s2), er1 :: er2)
+                                          true  => (case s1 of T.EXP (T.CONST _) => (s2,er1 :: er2) | a => (T.SEQ (a,s2), er1 :: er2))
                                         | false => (let val nt = Temp.newtemp () in 
                                                       (T.SEQ(s1, T.SEQ(T.MOVE (T.TEMP nt, er1),s2)),(T.TEMP nt)::er2)
                                                     end)
@@ -49,7 +49,10 @@ struct
         and reorder_stm (el, fxn) = let val temp = (reorder el) 
                                         val s = fxn (#2(temp))
                                     in 
-                                    T.SEQ((#1(temp)),s) end
+                                    (case (#1(temp)) of 
+                                      T.EXP (T.CONST _) => s
+                                    | a                 => T.SEQ(a,s)
+                                    ) end
 
 
 
