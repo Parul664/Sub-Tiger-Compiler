@@ -1,0 +1,15 @@
+Program[
+ LetExpr([
+  VarDec(a,NONE,
+   IExpr(0))],
+  ForExpr(
+i,   IExpr(0),
+   IExpr(100),
+   SeqExpr[
+    AssignExpr(
+     SimpleVar(a),
+     BinOpExpr(Plus,
+      LValueExpr(
+      SimpleVar(a)),
+      IExpr(1))),
+    SeqExpr[]]))]

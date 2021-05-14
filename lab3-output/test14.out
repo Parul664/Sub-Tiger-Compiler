@@ -1,0 +1,24 @@
+Program[
+ LetExpr([
+  TypeDec[  ArrayTy((int))],
+  TypeDec[  SeqTy[
+   (name,(string)),
+   (id,(int))]],
+  VarDec(rec,NONE,
+   RecordExpr((rectype),[
+    (name,
+     SExpr("aname")),
+    (id,
+     IExpr(0))])),
+  VarDec(arr,NONE,
+   ArrayExpr((arrtype),
+    IExpr(3),
+    IExpr(0)))],
+  IfExpr(
+   BinOpExpr(AngBrac,
+    LValueExpr(
+    SimpleVar(rec)),
+    LValueExpr(
+    SimpleVar(arr))),
+   IExpr(3),
+   IExpr(4)))]

@@ -1,0 +1,19 @@
+Program[
+ LetExpr([
+  TypeDec[  SeqTy[
+   (hd,(int)),
+   (tl,(intlist))]],
+  TypeDec[  SeqTy[
+   (key,(int)),
+   (children,(treelist))]],
+  TypeDec[  SeqTy[
+   (hd,(tree)),
+   (tl,(treelist))]],
+  VarDec(lis,SOME((intlist)),
+   RecordExpr((intlist),[
+    (hd,
+     IExpr(0)),
+    (tl,
+     NilExpr)]))],
+  LValueExpr(
+  SimpleVar(lis)))]

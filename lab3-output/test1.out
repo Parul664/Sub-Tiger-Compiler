@@ -1,0 +1,9 @@
+Program[
+ LetExpr([
+  TypeDec[  ArrayTy((int))],
+  VarDec(arr1,SOME((arrtype)),
+   ArrayExpr((arrtype),
+    IExpr(10),
+    IExpr(0)))],
+  LValueExpr(
+  SimpleVar(arr1)))]

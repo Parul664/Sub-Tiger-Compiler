@@ -1,0 +1,21 @@
+Program[
+ LetExpr([
+  FuncDecs(  fundec(nfactor,TF[
+   n,(int)  ],
+  SOME((int)),
+   BinOpExpr(Minus,
+    IfExpr(
+     BinOpExpr(Equals,
+      LValueExpr(
+      SimpleVar(n)),
+      IExpr(0)),
+     IExpr(1),
+     LValueExpr(
+     SimpleVar(n))),
+    FuncCallExpr(nfactor,[
+     BinOpExpr(Minus,
+      LValueExpr(
+      SimpleVar(n)),
+      IExpr(1))]))))],
+  FuncCallExpr(nfactor,[
+   IExpr(10)]))]

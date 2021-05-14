@@ -1,0 +1,14 @@
+Program[
+ LetExpr([
+  FuncDecs(  fundec(g,TF[
+   a,(int)  ],
+  SOME((int)),
+   LValueExpr(
+   SimpleVar(a)))),
+  TypeDec[  AlreadyTy((int))],
+  FuncDecs(  fundec(g,TF[
+   a,(int)  ],
+  SOME((int)),
+   LValueExpr(
+   SimpleVar(a))))],
+  IExpr(0))]

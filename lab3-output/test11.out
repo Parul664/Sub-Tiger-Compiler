@@ -1,0 +1,10 @@
+Program[
+ ForExpr(
+i,  IExpr(10),
+  SExpr(" "),
+  AssignExpr(
+   SimpleVar(i),
+   BinOpExpr(Minus,
+    LValueExpr(
+    SimpleVar(i)),
+    IExpr(1))))]

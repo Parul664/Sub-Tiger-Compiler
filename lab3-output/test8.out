@@ -1,0 +1,8 @@
+Program[
+ IfExpr(
+  SeqExpr[
+   BinOpExpr(GreatEqualThan,
+    IExpr(10),
+    IExpr(20))],
+  IExpr(30),
+  IExpr(40))]
