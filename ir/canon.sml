@@ -92,8 +92,12 @@ struct
         fun linear (T.SEQ (a,b),l) = linear (a, (linear (b, l)))
           | linear (s,l)           = s::l 
     
+        fun remNops [] ol= ol
+          | remNops ((T.EXP(T.CONST 0))::il) ol  = remNops il ol
+          | remNops (i :: il) ol = remNops il (ol@[i])
+
     in
-        linear(do_stm stm0 , [])
+        remNops (linear(do_stm stm0 , [])) []
     end
 
   (* Reverse the direction of the list, The blocks inside the list of basic blocks is reversed. 
