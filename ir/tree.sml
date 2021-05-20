@@ -5,7 +5,7 @@ struct
     type temp = int
 
     val nextLabel : label ref= ref 0
-    val nextTemp :  temp ref = ref 0
+    val nextTemp :  temp ref = ref 4
 
     fun newlabel () = (nextLabel := !nextLabel + 1; !nextLabel-1)
     fun newtemp ()  = (nextTemp := !nextTemp+ 1; !nextTemp-1 )

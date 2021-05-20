@@ -73,7 +73,7 @@ id = [a-zA-Z][a-zA-Z0-9_]*;
                               in UpdateLine (newlineCount yytext); continue()
                               end
                             );
-
+<COMMENT>"*" => (continue());
 <COMMENT>"\"" => (continue());
 <COMMENT>"\'" => (continue());
 

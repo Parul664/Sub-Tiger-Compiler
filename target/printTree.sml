@@ -33,13 +33,18 @@ structure PT
 
     fun printE d (T.CONST i) = "\027[34m(CONST \027[39m"^Int.toString(i)^"\027[36m)\027[39m"
       | printE d (T.NAME  l) = "(NAME " ^ Int.toString(l)^")"
-      | printE d (T.TEMP t)  = "(TEMP " ^ Int.toString(t)^")"
+      | printE d (T.TEMP t)  = ( case t of 
+                                0 => "sp"
+                              | 1 => "fp"
+                              | 2 => "ra"
+                              | a => "(TEMP T" ^ Int.toString(a)^")"
+                                )
       | printE d (T.BINOP (opp, e1, e2)) = "\027[31mBINOP (\027[39m" ^ (printBO opp)^ ","^(printE d e1) ^"," ^(printE d e2) ^"\027[31m)\027[39m"
-      | printE d (T.MEM (e)) = "( MEM "^(printE d e) ^ ")"
+      | printE d (T.MEM (e)) = "MEM ("^(printE d e) ^ ")"
       | printE d (T.CALL (e, el)) = let fun printL [] = ""
                                         | printL [a] = (printE d a)
-                                        | printL (a::al) = (printE d a) ^"," in      
-                                  "CALL (" ^ (printE d e) ^"," ^ (printL el) ^ ")"
+                                        | printL (a::al) = (printE d a) ^"," ^(printL al) in      
+                                  "CALL (" ^ (printE d e) ^",[" ^ (printL el) ^ "])"
                                   end
       | printE d (T.ESEQ (s, e)) = "\027[33mESEQ(\027[39m\n" ^(align (d+1))^ (printS (d+1) s) ^ ",\n"^ (align (d+1)) ^ (printE (d+1) e) ^"\027[33m)\027[39m"
 

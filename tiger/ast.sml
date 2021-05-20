@@ -121,7 +121,7 @@ struct
 	(* Convert all binary Operations to AST *)
 	fun plus a b = BinOpExpr (a,Plus,b)
 	fun minus a b = BinOpExpr (a, Minus, b)
-	fun mul a b = BinOpExpr (a,Minus,b)
+	fun mul a b = BinOpExpr (a,Mul,b)
 	fun divv a b = BinOpExpr (a, Div, b)
 	fun equals a b = BinOpExpr (a, Equals, b)
 	fun angbrac a b = BinOpExpr (a, AngBrac, b)

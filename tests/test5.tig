@@ -1,0 +1,155 @@
+/* if 4 < 4 | 3 > 2 & 5 then if 4<3 then 4&2 else 5&3 else 2>2; 5*/
+/*
+let var a := 3 in
+    a := if 4<9 then 4 else 5
+end */
+/*let 
+    var x := 5
+    var y := (let var m := 13 in m end) 
+in (
+    
+    x := y + 1 /* + z*/
+    )
+end*/
+
+/*
+let var i := 10 in
+    for a:= (2+3) to 10 do
+    (i := i+1) 
+end*/
+/*
+let 
+    var y := 3
+    var x := 4
+    var z := 5
+in 
+    let var x := 10
+    in
+        x + y
+    end 
+    ;
+    if (y < 10 & z < 6)
+    then
+        y := y + 10
+    else 
+        z := y + 5 
+    ;
+    if (y > 11)
+    then 
+        y := y + 1
+    ;
+    x ; y ; z
+end
+*/
+/*
+let 
+    var z := 3
+in
+    while z < 5 do 
+        z := z + 1
+    ;z
+end
+*/
+/*
+let 
+    var z := 3
+in
+    while z < 5 do 
+        (z := z + 1;
+        if (z>10) then break)
+    ;z
+end
+*/ /*
+if 20 then 3
+*/
+/*
+let var b := let var a := (while (10 > 20) do 4;5) in a end in b end*/
+/*
+let var x:= 5
+    var z := 7
+    var y := 4
+in (
+  x = y+z;
+  x>y;
+  y = y +1;
+  z < x
+)
+end
+*/
+/*
+while(1+2; 5>4) do 10
+*/
+/*
+let var a := 5 var x := (a := 2) in 10 end
+*/
+/*
+let 
+    var n := 10
+    var z := 100
+in 
+    for i := 1 to n do (
+        z := z - 25;
+        n := n - 1
+    )
+end
+*/
+
+/*
+let 
+    /*var n := 10*/
+    var z := 100
+in 
+    z := for n := 1 to n do (
+        z := z - 25;
+        z := n - 1
+    )
+end
+*/
+/*
+let 
+    var n := 10
+    var z := 100
+in 
+for n := 1 to n do (
+        z := z - 25;
+        /*while (n < z) do (n := n + 1; if n > 10 then break);*/
+        if z < 50 then break 
+    )
+end
+*/
+
+/* define a recursive function */
+
+let
+
+var a := 5*2
+/* calculate n! */
+function nfactor(n: int, b:int):int =
+        if  n = 0 
+            then 1
+            else n * nfactor(n-1, 7)
+
+in
+    a:=nfactor(3,4)
+end
+
+
+/* define valid mutually recursive procedures */
+/*
+let
+    var a := 3 
+    function ashish (a:int, b:int) = 
+        if (a < b) then a else b
+    var b := 4
+    function parul (x:int) =   
+        let 
+            var c := 3
+            function himani (z:int) = 
+                parul(b+c)
+        in 
+            ashish (3,4)
+        end 
+in
+    parul(3)
+end
+*/
