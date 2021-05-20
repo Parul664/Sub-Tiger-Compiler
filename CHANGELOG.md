@@ -1,13 +1,42 @@
-**Lab5 Lab6 Evaluation**
+**Lab5 evaluation**
 
-Git commit hash - 69aa44b79e95c21ce97c601aa26ac433c7031144
+Lab5 was done before the conversion to IR, and hence did not produce any specific output at that time, (this lab was gievn before lab6, and would need lab6 to check its output, please refer to Lab6 Commit Hash to check its output). 
+This lab was completed on *April 26, 2021*.
 
-Command
+Date - April 26, 2021
+
+Commit Hash - 5cfbad2c3dfce8f2325d94d8949f1a8e7b111865
+
+
+**Lab6 Evaluation**
+
+- With Support for Functions
+
+Commit hash = 69aa44b79e95c21ce97c601aa26ac433c7031144
+
+Date of Commit = May 20, 2021
+
+
+Commands
+
 Making the Compiler   : ```make all```
+
 Printing AST          : ```./tc filename --ast```
+
 Pretty Printing       : ```./tc filename --pp```
+
 IR Code Priting       : ```./tc filename --ir```
+
 Canonised IR Printing : ```./tc filename --can```
+
+
+- Without Support for functions
+
+Commit Hash = 22220c1966a7a0c8f2e834497f3c30304efde255
+Date of Commit = May 15, 2021
+
+Commands are same as above
+
 
 
 2021-02-17
