@@ -1,3 +1,14 @@
+**Lab5 Lab6 Evaluation**
+
+Git commit hash - 69aa44b79e95c21ce97c601aa26ac433c7031144
+
+Command
+Making the Compiler   : ```make all```
+Printing AST          : ```./tc filename --ast```
+Pretty Printing       : ```./tc filename --pp```
+IR Code Priting       : ```./tc filename --ir```
+Canonised IR Printing : ```./tc filename --can```
+
 
 2021-02-17
 - Made a compiler that prints "hello world"
