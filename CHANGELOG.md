@@ -10,7 +10,7 @@ Commit Hash - 5cfbad2c3dfce8f2325d94d8949f1a8e7b111865
 
 **Lab6 Evaluation**
 
-- With Support for Functions
+- With Support for Functions (to be used for evaluation)
 
 Commit hash = 69aa44b79e95c21ce97c601aa26ac433c7031144
 
@@ -33,6 +33,7 @@ Canonised IR Printing : ```./tc filename --can```
 - Without Support for functions
 
 Commit Hash = 22220c1966a7a0c8f2e834497f3c30304efde255
+
 Date of Commit = May 15, 2021
 
 Commands are same as above
