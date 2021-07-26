@@ -1,23 +1,6 @@
-**Lab5 evaluation**
-
-Lab5 was done before the conversion to IR, and hence did not produce any specific output at that time, (this lab was gievn before lab6, and would need lab6 to check its output, please refer to Lab6 Commit Hash to check its output). 
-This lab was completed on *April 26, 2021*.
-
-Date - April 26, 2021
-
-Commit Hash - 5cfbad2c3dfce8f2325d94d8949f1a8e7b111865
 
 
-**Lab6 Evaluation**
-
-- With Support for Functions (to be used for evaluation)
-
-Commit hash = 69aa44b79e95c21ce97c601aa26ac433c7031144
-
-Date of Commit = May 20, 2021
-
-
-Commands
+**Commands**
 
 Making the Compiler   : ```make all```
 

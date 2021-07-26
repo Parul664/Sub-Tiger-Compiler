@@ -1,7 +1,0 @@
-Program[
- LetExpr([
-  TypeDec[  AlreadyTy((int))],
-  VarDec(b,NONE,
-   IExpr(4)),
-  TypeDec[  AlreadyTy((string))]],
-  IExpr(0))]
